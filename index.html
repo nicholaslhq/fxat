@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FXAT | FX-Adjusted Ticker</title>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Colors */
+            --primary: #0f172a;
+            --primary-light: #334155;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0 0 8px 0;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* --- Controls Section --- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            pointer-events: none;
+            background: var(--bg-card);
+            padding: 0 4px;
+            height: 14px;
+            line-height: 14px;
+            margin-top: -19px;
+            /* Floating label style */
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            color: var(--primary);
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1rem;
+            min-width: 120px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            color: var(--primary);
+            border-color: var(--accent);
+            background-color: var(--bg-card);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* --- Stock Info & Stats --- */
+        .meta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .stock-title h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .stock-title .ticker-badge {
+            background: var(--primary-light);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        .currency-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 0;
+        }
+
+        .stat-box {
+            background: var(--bg-page);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .pos {
+            color: var(--success);
+        }
+
+        .neg {
+            color: var(--danger);
+        }
+
+        /* --- Chart Section --- */
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .time-ranges {
+            display: flex;
+            background: var(--bg-page);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .range-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .range-btn:hover {
+            color: var(--primary);
+        }
+
+        .range-btn.active {
+            background: var(--bg-card);
+            color: var(--accent);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        #chart {
+            width: 100%;
+            height: 500px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .chart-hint {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* --- Table Section --- */
+        .details-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn-text {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 400px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-page);
+            color: var(--text-muted);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 1px 0 var(--border);
+            /* Optional: explicit border bottom for sticky header */
+        }
+
+        th:first-child,
+        td:first-child {
+            text-align: left;
+        }
+
+        /* --- Utilities --- */
+        .hidden {
+            display: none !important;
+        }
+
+        .status-msg {
+            padding: 12px;
+            border-radius: 8px;
+            background: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            border: 1px solid transparent;
+        }
+
+        .status-msg.error {
+            background: #fef2f2;
+            color: var(--danger);
+            border-color: #fecaca;
+        }
+
+        .status-msg.loading {
+            background: #eff6ff;
+            color: var(--accent);
+            border-color: #bfdbfe;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(37, 99, 235, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 600px) {
+            .meta-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>FXAT</h1>
+            <div class="subtitle">See what your assets are really worth in your currency.</div>
+        </header>
+
+        <!-- Main Controls -->
+        <div class="card">
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <input id="ticker" type="text" placeholder="AAPL">
+                    <span class="input-label">TICKER</span>
+                </div>
+
+                <div style="color: var(--text-muted); font-weight: bold; font-size: 0.8rem;">IN</div>
+
+                <div class="input-wrapper">
+                    <input id="targetCurrency" type="text" placeholder="USD">
+                    <span class="input-label">CURRENCY</span>
+                </div>
+
+                <button id="btn-run" class="btn-primary" onclick="runApp()">View Chart</button>
+            </div>
+        </div>
+
+        <!-- Status Area -->
+        <div id="status-area" class="status-msg hidden"></div>
+
+        <!-- Results Area -->
+        <div id="results-area" class="hidden">
+
+            <!-- Stats Card -->
+            <div class="card">
+                <div class="meta-header">
+                    <div class="stock-title">
+                        <h2 id="meta-name">-</h2>
+                        <div class="currency-info">
+                            <span id="meta-symbol" class="ticker-badge">-</span>
+                            Base: <span id="meta-base">-</span> &rarr; Target: <span id="meta-target">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Starting Value</div>
+                        <div class="stat-value" id="val-start">-</div>
+                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="date-start">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Ending Value</div>
+                        <div class="stat-value" id="val-end">-</div>
+                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="date-end">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Return</div>
+                        <div class="stat-value" id="val-change">-</div>
+                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="val-change-alt"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="card">
+                <div class="chart-header">
+                    <div style="font-weight: 600;">Performance History</div>
+                    <div class="time-ranges">
+                        <button class="range-btn" onclick="setRange('1M')" data-range="1M">1M</button>
+                        <button class="range-btn" onclick="setRange('6M')" data-range="6M">6M</button>
+                        <button class="range-btn" onclick="setRange('YTD')" data-range="YTD">YTD</button>
+                        <button class="range-btn" onclick="setRange('1Y')" data-range="1Y">1Y</button>
+                        <button class="range-btn" onclick="setRange('3Y')" data-range="3Y">3Y</button>
+                        <button class="range-btn" onclick="setRange('5Y')" data-range="5Y">5Y</button>
+                        <button class="range-btn active" onclick="setRange('MAX')" data-range="MAX">Max</button>
+                    </div>
+                </div>
+
+                <div id="chart"></div>
+
+                <div class="chart-hint">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span>Tip: Drag across the chart to measure specific periods. Double-click to reset.</span>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="details-toggle">
+                <button class="btn-secondary" onclick="toggleTable()">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <span id="table-toggle-text">Show Data Table</span>
+                </button>
+            </div>
+
+            <div id="table-container" class="card hidden">
+                <h3 style="margin-top:0; border-bottom:1px solid var(--border); padding-bottom:12px;">Recent Data (30
+                    Days)</h3>
+                <div class="table-responsive">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Original Price</th>
+                                <th>FX Rate</th>
+                                <th>Converted Price</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const PROXY_URL = 'https://corsproxy.io/?';
+        const YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+
+        // --- State ---
+        let GLOBAL = {
+            data: [],
+            meta: { symbol: '', currency: '', longName: '' },
+            targetCurrency: '',
+            chartInstance: null
+        };
+
+        // --- Helpers ---
+        const el = (id) => document.getElementById(id);
+
+        const formatMoney = (val, currency) => {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(val);
+        };
+
+        const showStatus = (msg, type = 'normal') => {
+            const box = el('status-area');
+            box.classList.remove('hidden', 'error', 'loading');
+            box.innerHTML = '';
+
+            if (type === 'error') {
+                box.classList.add('error');
+                box.innerHTML = `<strong>Error:</strong>&nbsp;${msg}`;
+            } else if (type === 'loading') {
+                box.classList.add('loading');
+                box.innerHTML = `<div class="spinner"></div>&nbsp;${msg}`;
+            } else {
+                // success/normal
+            }
+        };
+
+        const hideStatus = () => el('status-area').classList.add('hidden');
+
+        // --- Core Data Fetching ---
+        async function fetchYahooSeries(symbol) {
+            // Yahoo mostly needs interval=1d for history
+            // We request 10y or max possible
+            const url = `${YAHOO_BASE}${symbol}?range=10y&interval=1d`;
+            // Using corsproxy to bypass CORS on frontend-only
+            const encodedUrl = PROXY_URL + encodeURIComponent(url);
+
+            try {
+                const response = await fetch(encodedUrl);
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                const json = await response.json();
+
+                const result = json.chart?.result?.[0];
+                if (!result) throw new Error(`No data found for ${symbol}`);
+
+                const timestamps = result.timestamp || [];
+                const adjClose = result.indicators?.adjclose?.[0]?.adjclose || [];
+                const quote = result.indicators?.quote?.[0] || {};
+                const close = quote.close || [];
+
+                // Prefer adjusted, fallback to close
+                const priceArray = adjClose.length > 0 ? adjClose : close;
+
+                const meta = result.meta || {};
+                const timeSeries = {};
+                const sortedDates = [];
+
+                timestamps.forEach((ts, i) => {
+                    if (priceArray[i] != null) { // Filter nulls
+                        const date = new Date(ts * 1000).toISOString().split('T')[0];
+                        timeSeries[date] = priceArray[i];
+                        sortedDates.push(date);
+                    }
+                });
+
+                return {
+                    symbol: meta.symbol,
+                    currency: meta.currency,
+                    shortName: meta.shortName,
+                    longName: meta.longName || meta.shortName || meta.symbol,
+                    data: timeSeries,
+                    dates: sortedDates
+                };
+
+            } catch (e) {
+                console.warn("Fetch Error details:", e);
+                throw e;
+            }
+        }
+
+        // --- Logic ---
+        async function runApp() {
+            const tickerIn = el('ticker').value.trim().toUpperCase();
+            const currencyIn = el('targetCurrency').value.trim().toUpperCase();
+
+            if (!tickerIn || !currencyIn) {
+                showStatus("Please enter both a ticker symbol and a target currency.", "error");
+                return;
+            }
+
+            // UI Reset
+            el('results-area').classList.add('hidden');
+            el('btn-run').disabled = true;
+            showStatus(`Fetching data for <b>${tickerIn}</b>...`, "loading");
+
+            GLOBAL.targetCurrency = currencyIn;
+
+            try {
+                // 1. Fetch Asset
+                const stockRes = await fetchYahooSeries(tickerIn);
+                GLOBAL.meta = {
+                    symbol: stockRes.symbol,
+                    currency: stockRes.currency,
+                    longName: stockRes.longName
+                };
+
+                // 2. Fetch/Calc FX
+                let fxData = {};
+                let inverted = false;
+
+                // Display intermediate status
+                showStatus(`Found <b>${stockRes.symbol}</b> (${stockRes.currency}). Looking up exchange rate to <b>${currencyIn}</b>...`, "loading");
+
+                if (stockRes.currency === currencyIn) {
+                    fxData = null; // 1:1
+                } else {
+                    // Try Direct: e.g. USD to EUR => USDEUR=X
+                    const pairDirect = `${stockRes.currency}${currencyIn}=X`;
+                    try {
+                        const fxRes = await fetchYahooSeries(pairDirect);
+                        fxData = fxRes.data;
+                    } catch (e1) {
+                        // Try Inverse: e.g. EURUSD=X then invert
+                        const pairInverse = `${currencyIn}${stockRes.currency}=X`;
+                        try {
+                            const fxResInv = await fetchYahooSeries(pairInverse);
+                            fxData = fxResInv.data;
+                            inverted = true;
+                        } catch (e2) {
+                            throw new Error(`Could not determine FX rate between ${stockRes.currency} and ${currencyIn}.`);
+                        }
+                    }
+                }
+
+                // 3. Merge
+                GLOBAL.data = alignAndConvert(stockRes, fxData, inverted);
+
+                // 4. Render
+                renderUI();
+                hideStatus();
+
+            } catch (err) {
+                showStatus(err.message, "error");
+            } finally {
+                el('btn-run').disabled = false;
+            }
+        }
+
+        function alignAndConvert(stockRes, fxMap, isInverted) {
+            const aligned = [];
+            let lastKnownFx = null;
+
+            stockRes.dates.forEach(date => {
+                const stockPrice = stockRes.data[date];
+                let fxRate = 1;
+
+                if (fxMap) {
+                    let rawFx = fxMap[date];
+                    // Forward Fill
+                    if (rawFx == null && lastKnownFx !== null) {
+                        rawFx = lastKnownFx;
+                    }
+
+                    if (rawFx != null) {
+                        lastKnownFx = rawFx; // Update memory
+                        fxRate = isInverted ? (1 / rawFx) : rawFx;
+                    } else {
+                        // If we have no FX rate yet (beginning of time), 
+                        // we technically can't convert accurately. 
+                        // We'll skip this point or assume 1? Skipping is safer for charts.
+                        return;
+                    }
+                }
+
+                aligned.push({
+                    date: date,
+                    original: stockPrice,
+                    fx: fxRate,
+                    converted: stockPrice * fxRate
+                });
+            });
+
+            return aligned;
+        }
+
+        // --- Rendering ---
+        function renderUI() {
+            el('results-area').classList.remove('hidden');
+
+            // Header Info
+            el('meta-name').textContent = GLOBAL.meta.longName;
+            el('meta-symbol').textContent = GLOBAL.meta.symbol;
+            el('meta-base').textContent = GLOBAL.meta.currency;
+            el('meta-target').textContent = GLOBAL.targetCurrency;
+
+            // Table
+            const tbody = document.querySelector("#dataTable tbody");
+            tbody.innerHTML = "";
+            // Show last 30 days
+            const recent = GLOBAL.data.slice(-30).reverse();
+            recent.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.original.toFixed(2)} ${GLOBAL.meta.currency}</td>
+            <td>${row.fx.toFixed(4)}</td>
+            <td style="font-weight:600">${row.converted.toFixed(2)} ${GLOBAL.targetCurrency}</td>
+        `;
+                tbody.appendChild(tr);
+            });
+
+            // Default Range
+            setRange('MAX');
+        }
+
+        function setRange(range) {
+            // Buttons
+            document.querySelectorAll('.range-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.range === range);
+            });
+
+            if (!GLOBAL.data.length) return;
+
+            // Filter
+            const now = new Date();
+            let cutoff;
+
+            if (range === 'MAX') {
+                cutoff = new Date('1900-01-01');
+            } else if (range === 'YTD') {
+                cutoff = new Date(now.getFullYear(), 0, 1);
+            } else {
+                // For other ranges, we subtract from NOW
+                cutoff = new Date(now);
+                if (range === '5Y') cutoff.setFullYear(now.getFullYear() - 5);
+                else if (range === '3Y') cutoff.setFullYear(now.getFullYear() - 3);
+                else if (range === '1Y') cutoff.setFullYear(now.getFullYear() - 1);
+                else if (range === '6M') cutoff.setMonth(now.getMonth() - 6);
+                else if (range === '1M') cutoff.setMonth(now.getMonth() - 1);
+            }
+
+            const filtered = GLOBAL.data.filter(d => new Date(d.date) >= cutoff);
+
+            drawChart(filtered);
+            updateStats(filtered[0], filtered[filtered.length - 1]);
+        }
+
+        function updateStats(start, end) {
+            if (!start || !end) return;
+
+            const vStart = start.converted;
+            const vEnd = end.converted;
+            const change = vEnd - vStart;
+            const pct = (change / vStart) * 100;
+
+            el('val-start').textContent = formatMoney(vStart, GLOBAL.targetCurrency);
+            el('date-start').textContent = start.date;
+
+            el('val-end').textContent = formatMoney(vEnd, GLOBAL.targetCurrency);
+            el('date-end').textContent = end.date;
+
+            const elChange = el('val-change');
+            const sign = change >= 0 ? '+' : '';
+            elChange.className = 'stat-value ' + (change >= 0 ? 'pos' : 'neg');
+            elChange.textContent = `${sign}${formatMoney(change, GLOBAL.targetCurrency)} (${sign}${pct.toFixed(2)}%)`;
+
+            // Secondary Return (Original Currency)
+            const elChangeAlt = el('val-change-alt');
+            // Show if Target is NOT USD (and optionally checking if base is USD or just display base return)
+            // The request said: "add the total return of usd if the currency selected isnt USD" 
+            // We'll show the Base Currency return if Target != Base (and usually Base is USD).
+            // Actually, specifically if Target != USD.
+            if (GLOBAL.targetCurrency !== 'USD' && start.original != null && end.original != null) {
+                const vStartOrig = start.original;
+                const vEndOrig = end.original;
+                const changeOrig = vEndOrig - vStartOrig;
+                const pctOrig = (changeOrig / vStartOrig) * 100;
+                const signOrig = changeOrig >= 0 ? '+' : '';
+
+                elChangeAlt.innerHTML = `<span class="${changeOrig >= 0 ? 'pos' : 'neg'}">${signOrig}${formatMoney(changeOrig, GLOBAL.meta.currency)} (${signOrig}${pctOrig.toFixed(2)}%)</span>`;
+            } else {
+                elChangeAlt.textContent = '';
+            }
+        }
+
+        function drawChart(data) {
+            const dates = data.map(d => d.date);
+            const prices = data.map(d => d.converted);
+
+            const trace = {
+                x: dates,
+                y: prices,
+                type: 'scatter',
+                mode: 'lines',
+                line: { color: '#2563eb', width: 2 },
+                fill: 'tozeroy',
+                fillcolor: 'rgba(37, 99, 235, 0.05)',
+                name: 'Value'
+            };
+
+            const layout = {
+                autosize: true,
+                height: 500,
+                margin: { l: 50, r: 20, t: 30, b: 40 },
+                showlegend: false,
+                xaxis: {
+                    showgrid: false,
+                    zeroline: false,
+                    fixedrange: true // Disable zoom on axis to encourage range slider or cleaner UX
+                },
+                yaxis: {
+                    showgrid: true,
+                    gridcolor: '#f1f5f9',
+                    zeroline: false,
+                    fixedrange: true
+                },
+                hovermode: 'x unified',
+                dragmode: 'select', // Enable selection for the measurement tool
+                selectdirection: 'h'
+            };
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            Plotly.newPlot('chart', [trace], layout, config).then(gd => {
+                // Selection Handler
+                gd.on('plotly_selected', (event) => {
+                    if (event && event.range) {
+                        const xRange = event.range.x;
+                        const startDate = xRange[0];
+                        const endDate = xRange[1];
+
+                        // Filter data within selection
+                        const subset = data.filter(d => d.date >= startDate && d.date <= endDate);
+                        if (subset.length > 1) {
+                            updateStats(subset[0], subset[subset.length - 1]);
+                        }
+                    } else {
+                        // Deselect / Reset
+                        updateStats(data[0], data[data.length - 1]);
+                    }
+                });
+
+                // Double Click Handler
+                gd.on('plotly_doubleclick', () => {
+                    updateStats(data[0], data[data.length - 1]);
+                });
+                // Click to reset logic if needed
+                gd.on('plotly_click', () => {
+                    // Optional: reset stats on single click elsewhere? 
+                    // Usually better to stick to explicit behavior.
+                });
+            });
+        }
+
+        function toggleTable() {
+            const table = el('table-container');
+            const isHidden = table.classList.toggle('hidden');
+            const btnText = el('table-toggle-text');
+            if (btnText) {
+                btnText.textContent = isHidden ? "Show Data Table" : "Hide Data Table";
+            }
+        }
+
+        // Enter Key Support
+        el('ticker').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
+        el('targetCurrency').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
+
+    </script>
+</body>
+
+</html>
