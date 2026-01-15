@@ -17,8 +17,6 @@
             /* Colors */
             --primary: #0f172a;
             --primary-light: #334155;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
             --bg-page: #f8fafc;
             --bg-card: #ffffff;
             --border: #e2e8f0;
@@ -28,6 +26,14 @@
             --danger: #ef4444;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --radius: 12px;
+
+            /* Chart Colors */
+            --color-0: #2563eb;
+            /* Blue */
+            --color-1: #10b981;
+            /* Emerald */
+            --color-2: #f59e0b;
+            /* Amber */
         }
 
         * {
@@ -40,7 +46,7 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             line-height: 1.5;
         }
 
@@ -66,7 +72,7 @@
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         /* --- Controls Section --- */
@@ -74,8 +80,8 @@
             background: var(--bg-card);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
             border: 1px solid var(--border);
         }
 
@@ -123,12 +129,12 @@
         }
 
         input:focus {
-            border-color: var(--accent);
+            border-color: var(--color-0);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .btn-primary {
-            background-color: var(--accent);
+            background-color: var(--color-0);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -141,7 +147,7 @@
         }
 
         .btn-primary:hover {
-            background-color: var(--accent-hover);
+            opacity: 0.9;
         }
 
         .btn-primary:disabled {
@@ -166,7 +172,7 @@
 
         .btn-secondary:hover {
             color: var(--primary);
-            border-color: var(--accent);
+            border-color: var(--color-0);
             background-color: var(--bg-card);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
@@ -201,7 +207,7 @@
             border-radius: 4px;
             font-size: 0.8rem;
             vertical-align: middle;
-            margin-left: 8px;
+            margin-right: 4px;
         }
 
         .currency-info {
@@ -210,33 +216,55 @@
             margin-top: 4px;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        .stats-container {
+            display: flex;
+            flex-direction: column;
             gap: 16px;
-            margin-bottom: 0;
         }
 
-        .stat-box {
+        .stats-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr 1fr;
+            /* Currency Label | Start | End | Return */
+            gap: 16px;
+            align-items: center;
+            padding: 12px;
             background: var(--bg-page);
-            padding: 12px 16px;
             border-radius: 8px;
-            border: 1px solid var(--border);
+            border-left: 4px solid transparent;
+            /* Colored border */
         }
 
-        .stat-label {
+        .stats-row-header {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr 1fr;
+            gap: 16px;
+            padding: 0 12px 8px 12px;
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 600;
-            margin-bottom: 4px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 8px;
+        }
+
+        .stat-currency-label {
+            font-weight: 700;
+            font-size: 1rem;
         }
 
         .stat-value {
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             color: var(--primary);
+        }
+
+        .stat-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-top: 2px;
         }
 
         .pos {
@@ -253,8 +281,76 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
+            gap: 16px;
             flex-wrap: wrap;
-            gap: 10px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .chart-title {
+            font-weight: 600;
+        }
+
+        /* Wrapper for all toggle controls */
+        .toggle-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--bg-page);
+            padding: 2px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: #fff;
+            color: var(--color-0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+        }
+
+        /* Icon-only toggle button */
+        .toggle-btn-icon {
+            padding: 4px;
+            min-width: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1;
+        }
+
+        .toggle-btn:hover {
+            color: var(--primary);
+        }
+
+        .toggle-btn.active:hover {
+            color: var(--color-0);
         }
 
         .time-ranges {
@@ -282,13 +378,14 @@
 
         .range-btn.active {
             background: var(--bg-card);
-            color: var(--accent);
+            color: var(--color-0);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         #chart {
             width: 100%;
-            height: 500px;
+            /* Removed fixed height to allow auto-expansion */
+            min-height: 500px;
             border-radius: 4px;
             overflow: hidden;
         }
@@ -310,16 +407,6 @@
             margin: 20px 0;
         }
 
-        .btn-text {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: 0.9rem;
-        }
-
         .table-responsive {
             overflow-x: auto;
             overflow-y: auto;
@@ -331,13 +418,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             white-space: nowrap;
         }
 
         th,
         td {
-            padding: 12px 16px;
+            padding: 10px 14px;
             text-align: right;
             border-bottom: 1px solid var(--border);
         }
@@ -350,15 +437,22 @@
             top: 0;
             z-index: 10;
             box-shadow: 0 1px 0 var(--border);
-            /* Optional: explicit border bottom for sticky header */
         }
 
         th:first-child,
         td:first-child {
             text-align: left;
+            position: sticky;
+            left: 0;
+            background: inherit;
+            z-index: 1;
         }
 
-        /* --- Utilities --- */
+        th:first-child {
+            z-index: 11;
+            background: var(--bg-page);
+        }
+
         .hidden {
             display: none !important;
         }
@@ -383,7 +477,7 @@
 
         .status-msg.loading {
             background: #eff6ff;
-            color: var(--accent);
+            color: var(--color-0);
             border-color: #bfdbfe;
         }
 
@@ -391,7 +485,7 @@
             width: 16px;
             height: 16px;
             border: 2px solid rgba(37, 99, 235, 0.2);
-            border-top-color: var(--accent);
+            border-top-color: var(--color-0);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -402,20 +496,56 @@
             }
         }
 
-        /* Mobile tweaks */
         @media (max-width: 600px) {
             .meta-header {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
             .input-group {
                 flex-direction: column;
                 align-items: stretch;
+            }
+
+            .stats-row,
+            .stats-row-header {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                text-align: left;
+            }
+
+            .stats-row>div,
+            .stats-row-header>div {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            /* Chart Header Mobile - switch back to Flex Column */
+            .chart-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .header-controls {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 12px;
+            }
+
+            .chart-title {
+                text-align: center;
+            }
+
+            .toggle-controls {
+                justify-content: center;
+            }
+
+            .time-ranges {
+                justify-content: center;
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -425,8 +555,8 @@
 
     <div class="container">
         <header>
-            <h1>FXAT</h1>
-            <div class="subtitle">See what your assets are really worth in your currency.</div>
+            <h1>FX-Adjusted Ticker</h1>
+            <div class="subtitle">Visualize the impact of exchange rates on your returns</div>
         </header>
 
         <!-- Main Controls -->
@@ -440,7 +570,7 @@
                 <div style="color: var(--text-muted); font-weight: bold; font-size: 0.8rem;">IN</div>
 
                 <div class="input-wrapper">
-                    <input id="targetCurrency" type="text" placeholder="USD">
+                    <input id="targetCurrency" type="text" placeholder="USD,EUR,GBP">
                     <span class="input-label">CURRENCY</span>
                 </div>
 
@@ -461,42 +591,81 @@
                         <h2 id="meta-name">-</h2>
                         <div class="currency-info">
                             <span id="meta-symbol" class="ticker-badge">-</span>
-                            Base: <span id="meta-base">-</span> &rarr; Target: <span id="meta-target">-</span>
+                            Base: <span id="meta-base">-</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="stats-grid" id="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-label">Starting Value</div>
-                        <div class="stat-value" id="val-start">-</div>
-                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="date-start">-</div>
+                <div id="stats-area">
+                    <div class="stats-row-header hidden-mobile">
+                        <div>Target</div>
+                        <div>Starting Value</div>
+                        <div>Ending Value</div>
+                        <div>Total Return</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Ending Value</div>
-                        <div class="stat-value" id="val-end">-</div>
-                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="date-end">-</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Total Return</div>
-                        <div class="stat-value" id="val-change">-</div>
-                        <div class="stat-label" style="margin-top:4px; font-weight:normal;" id="val-change-alt"></div>
-                    </div>
+                    <div id="stats-rows" class="stats-container"></div>
                 </div>
             </div>
 
             <!-- Chart Card -->
             <div class="card">
                 <div class="chart-header">
-                    <div style="font-weight: 600;">Performance History</div>
-                    <div class="time-ranges">
-                        <button class="range-btn" onclick="setRange('1M')" data-range="1M">1M</button>
-                        <button class="range-btn" onclick="setRange('6M')" data-range="6M">6M</button>
-                        <button class="range-btn" onclick="setRange('YTD')" data-range="YTD">YTD</button>
-                        <button class="range-btn" onclick="setRange('1Y')" data-range="1Y">1Y</button>
-                        <button class="range-btn" onclick="setRange('3Y')" data-range="3Y">3Y</button>
-                        <button class="range-btn" onclick="setRange('5Y')" data-range="5Y">5Y</button>
-                        <button class="range-btn active" onclick="setRange('MAX')" data-range="MAX">Max</button>
+                    <div class="chart-title">Performance History</div>
+
+                    <div class="header-controls">
+                        <div class="toggle-controls">
+                            <div id="view-toggle" class="toggle-group hidden">
+                                <button class="toggle-btn toggle-btn-icon active" onclick="setViewMode('overlay')"
+                                    data-view="overlay" title="Overlay View">
+                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <rect x="3" y="3" width="8" height="8" rx="1" stroke-width="1" />
+                                        <rect x="5" y="5" width="8" height="8" rx="1" stroke-width="1" />
+                                    </svg>
+                                </button>
+                                <button class="toggle-btn toggle-btn-icon" onclick="setViewMode('stacked')"
+                                    data-view="stacked" title="Stacked View">
+                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <path d="M2 4h12M3 7h10M4 10h8" stroke-width="1" stroke-linecap="round" />
+                                        <path d="M2 4l1 3l1 3l1 3h6l1-3l1-3l1-3z" stroke-width="1"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div id="dual-axis-toggle" class="toggle-group hidden">
+                                <button class="toggle-btn toggle-btn-icon active" onclick="setDualAxis(false)"
+                                    id="btn-dual-axis-off" data-axis="off" title="Hide Base Currency">
+                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <path d="M1 8s3-4.5 7-4.5 7 4.5 7 4.5-3 4.5-7 4.5-7-4.5-7-4.5z" stroke-width="1"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <circle cx="8" cy="8" r="4" stroke-width="1" />
+                                        <text x="8" y="10.2" text-anchor="middle" font-size="6.5" font-weight="800"
+                                            fill="currentColor" stroke="none">$</text>
+                                        <line x1="3" y1="3" x2="13" y2="13" stroke-width="1.2" stroke-linecap="round" />
+                                    </svg>
+                                </button>
+                                <button class="toggle-btn toggle-btn-icon" onclick="setDualAxis(true)"
+                                    id="btn-dual-axis-on" data-axis="on" title="Show Base Currency">
+                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <path d="M1 8s3-4.5 7-4.5 7 4.5 7 4.5-3 4.5-7 4.5-7-4.5-7-4.5z" stroke-width="1"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <circle cx="8" cy="8" r="4" stroke-width="1" />
+                                        <text x="8" y="10.2" text-anchor="middle" font-size="6.5" font-weight="800"
+                                            fill="currentColor" stroke="none">$</text>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="time-ranges">
+                            <button class="range-btn" onclick="setRange('1M')" data-range="1M">1M</button>
+                            <button class="range-btn" onclick="setRange('6M')" data-range="6M">6M</button>
+                            <button class="range-btn" onclick="setRange('YTD')" data-range="YTD">YTD</button>
+                            <button class="range-btn" onclick="setRange('1Y')" data-range="1Y">1Y</button>
+                            <button class="range-btn" onclick="setRange('3Y')" data-range="3Y">3Y</button>
+                            <button class="range-btn" onclick="setRange('5Y')" data-range="5Y">5Y</button>
+                            <button class="range-btn active" onclick="setRange('MAX')" data-range="MAX">Max</button>
+                        </div>
                     </div>
                 </div>
 
@@ -507,7 +676,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
-                    <span>Tip: Drag across the chart to measure specific periods. Double-click to reset.</span>
+                    <span>Tip: Drag to measure. Double-click to reset.</span>
                 </div>
             </div>
 
@@ -527,14 +696,7 @@
                     Days)</h3>
                 <div class="table-responsive">
                     <table id="dataTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Original Price</th>
-                                <th>FX Rate</th>
-                                <th>Converted Price</th>
-                            </tr>
-                        </thead>
+                        <thead></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -547,16 +709,17 @@
         // --- Configuration ---
         const PROXY_URL = 'https://corsproxy.io/?';
         const YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
+        const CHART_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#7c3aed', '#ec4899'];
 
         // --- State ---
         let GLOBAL = {
-            data: [],
-            meta: { symbol: '', currency: '', longName: '' },
-            targetCurrency: '',
-            chartInstance: null
+            baseMeta: { symbol: '', currency: '', longName: '' },
+            series: [],
+            chartMode: 'overlay', // or 'stacked'
+            chartInstance: null,
+            showDualAxis: false
         };
 
-        // --- Helpers ---
         const el = (id) => document.getElementById(id);
 
         const formatMoney = (val, currency) => {
@@ -572,7 +735,6 @@
             const box = el('status-area');
             box.classList.remove('hidden', 'error', 'loading');
             box.innerHTML = '';
-
             if (type === 'error') {
                 box.classList.add('error');
                 box.innerHTML = `<strong>Error:</strong>&nbsp;${msg}`;
@@ -580,25 +742,19 @@
                 box.classList.add('loading');
                 box.innerHTML = `<div class="spinner"></div>&nbsp;${msg}`;
             } else {
-                // success/normal
+                box.innerHTML = msg;
             }
         };
 
         const hideStatus = () => el('status-area').classList.add('hidden');
 
-        // --- Core Data Fetching ---
         async function fetchYahooSeries(symbol) {
-            // Yahoo mostly needs interval=1d for history
-            // We request 10y or max possible
             const url = `${YAHOO_BASE}${symbol}?range=10y&interval=1d`;
-            // Using corsproxy to bypass CORS on frontend-only
             const encodedUrl = PROXY_URL + encodeURIComponent(url);
-
             try {
                 const response = await fetch(encodedUrl);
                 if (!response.ok) throw new Error(`HTTP error ${response.status}`);
                 const json = await response.json();
-
                 const result = json.chart?.result?.[0];
                 if (!result) throw new Error(`No data found for ${symbol}`);
 
@@ -606,16 +762,13 @@
                 const adjClose = result.indicators?.adjclose?.[0]?.adjclose || [];
                 const quote = result.indicators?.quote?.[0] || {};
                 const close = quote.close || [];
-
-                // Prefer adjusted, fallback to close
                 const priceArray = adjClose.length > 0 ? adjClose : close;
-
                 const meta = result.meta || {};
                 const timeSeries = {};
                 const sortedDates = [];
 
                 timestamps.forEach((ts, i) => {
-                    if (priceArray[i] != null) { // Filter nulls
+                    if (priceArray[i] != null) {
                         const date = new Date(ts * 1000).toISOString().split('T')[0];
                         timeSeries[date] = priceArray[i];
                         sortedDates.push(date);
@@ -630,74 +783,82 @@
                     data: timeSeries,
                     dates: sortedDates
                 };
-
             } catch (e) {
                 console.warn("Fetch Error details:", e);
                 throw e;
             }
         }
 
-        // --- Logic ---
         async function runApp() {
             const tickerIn = el('ticker').value.trim().toUpperCase();
-            const currencyIn = el('targetCurrency').value.trim().toUpperCase();
+            const rawCurrencyIn = el('targetCurrency').value.trim().toUpperCase();
+            let targetCurrencies = rawCurrencyIn.split(',').map(c => c.trim()).filter(c => c.length > 0);
 
-            if (!tickerIn || !currencyIn) {
-                showStatus("Please enter both a ticker symbol and a target currency.", "error");
+            let limitExceeded = false;
+            if (targetCurrencies.length > 5) {
+                limitExceeded = true;
+                targetCurrencies = targetCurrencies.slice(0, 5);
+            }
+
+            if (!tickerIn || targetCurrencies.length === 0) {
+                showStatus("Please enter a ticker symbol and at least one target currency.", "error");
                 return;
             }
 
-            // UI Reset
             el('results-area').classList.add('hidden');
             el('btn-run').disabled = true;
             showStatus(`Fetching data for <b>${tickerIn}</b>...`, "loading");
 
-            GLOBAL.targetCurrency = currencyIn;
+            GLOBAL.series = [];
 
             try {
-                // 1. Fetch Asset
                 const stockRes = await fetchYahooSeries(tickerIn);
-                GLOBAL.meta = {
+                GLOBAL.baseMeta = {
                     symbol: stockRes.symbol,
                     currency: stockRes.currency,
                     longName: stockRes.longName
                 };
 
-                // 2. Fetch/Calc FX
-                let fxData = {};
-                let inverted = false;
+                showStatus(`Found <b>${stockRes.symbol}</b> (${stockRes.currency}). processing currencies...`, "loading");
 
-                // Display intermediate status
-                showStatus(`Found <b>${stockRes.symbol}</b> (${stockRes.currency}). Looking up exchange rate to <b>${currencyIn}</b>...`, "loading");
+                for (let i = 0; i < targetCurrencies.length; i++) {
+                    const target = targetCurrencies[i];
+                    let fxMap = null;
+                    let inverted = false;
 
-                if (stockRes.currency === currencyIn) {
-                    fxData = null; // 1:1
-                } else {
-                    // Try Direct: e.g. USD to EUR => USDEUR=X
-                    const pairDirect = `${stockRes.currency}${currencyIn}=X`;
-                    try {
-                        const fxRes = await fetchYahooSeries(pairDirect);
-                        fxData = fxRes.data;
-                    } catch (e1) {
-                        // Try Inverse: e.g. EURUSD=X then invert
-                        const pairInverse = `${currencyIn}${stockRes.currency}=X`;
+                    if (target !== stockRes.currency) {
                         try {
-                            const fxResInv = await fetchYahooSeries(pairInverse);
-                            fxData = fxResInv.data;
-                            inverted = true;
-                        } catch (e2) {
-                            throw new Error(`Could not determine FX rate between ${stockRes.currency} and ${currencyIn}.`);
+                            const fxRes = await fetchYahooSeries(`${stockRes.currency}${target}=X`);
+                            fxMap = fxRes.data;
+                        } catch (e1) {
+                            try {
+                                const fxResInv = await fetchYahooSeries(`${target}${stockRes.currency}=X`);
+                                fxMap = fxResInv.data;
+                                inverted = true;
+                            } catch (e2) {
+                                throw new Error(`Currency '${target}' is not valid or no data available.`);
+                            }
                         }
                     }
+
+                    const seriesData = alignAndConvert(stockRes, fxMap, inverted);
+                    GLOBAL.series.push({
+                        currency: target,
+                        data: seriesData,
+                        color: CHART_COLORS[i % CHART_COLORS.length]
+                    });
                 }
 
-                // 3. Merge
-                GLOBAL.data = alignAndConvert(stockRes, fxData, inverted);
-
-                // 4. Render
-                renderUI();
-                hideStatus();
-
+                if (GLOBAL.series.length > 0) {
+                    renderUI();
+                    if (limitExceeded) {
+                        showStatus("Displaying first 5 currencies (limit reached).", "normal");
+                    } else {
+                        hideStatus();
+                    }
+                } else {
+                    showStatus("Could not generate any data for the selected inputs.", "error");
+                }
             } catch (err) {
                 showStatus(err.message, "error");
             } finally {
@@ -708,88 +869,92 @@
         function alignAndConvert(stockRes, fxMap, isInverted) {
             const aligned = [];
             let lastKnownFx = null;
-
             stockRes.dates.forEach(date => {
                 const stockPrice = stockRes.data[date];
                 let fxRate = 1;
 
                 if (fxMap) {
                     let rawFx = fxMap[date];
-                    // Forward Fill
-                    if (rawFx == null && lastKnownFx !== null) {
-                        rawFx = lastKnownFx;
-                    }
-
+                    if (rawFx == null && lastKnownFx !== null) rawFx = lastKnownFx;
                     if (rawFx != null) {
-                        lastKnownFx = rawFx; // Update memory
+                        lastKnownFx = rawFx;
                         fxRate = isInverted ? (1 / rawFx) : rawFx;
                     } else {
-                        // If we have no FX rate yet (beginning of time), 
-                        // we technically can't convert accurately. 
-                        // We'll skip this point or assume 1? Skipping is safer for charts.
                         return;
                     }
                 }
-
-                aligned.push({
-                    date: date,
-                    original: stockPrice,
-                    fx: fxRate,
-                    converted: stockPrice * fxRate
-                });
+                aligned.push({ date: date, original: stockPrice, fx: fxRate, converted: stockPrice * fxRate });
             });
-
             return aligned;
         }
 
         // --- Rendering ---
         function renderUI() {
             el('results-area').classList.remove('hidden');
+            el('meta-name').textContent = GLOBAL.baseMeta.longName;
+            el('meta-symbol').textContent = GLOBAL.baseMeta.symbol;
+            el('meta-base').textContent = GLOBAL.baseMeta.currency;
 
-            // Header Info
-            el('meta-name').textContent = GLOBAL.meta.longName;
-            el('meta-symbol').textContent = GLOBAL.meta.symbol;
-            el('meta-base').textContent = GLOBAL.meta.currency;
-            el('meta-target').textContent = GLOBAL.targetCurrency;
+            // Toggle Visibility based on count
+            const toggle = el('view-toggle');
+            if (GLOBAL.series.length > 1) {
+                toggle.classList.remove('hidden');
+            } else {
+                toggle.classList.add('hidden');
+            }
 
-            // Table
-            const tbody = document.querySelector("#dataTable tbody");
-            tbody.innerHTML = "";
-            // Show last 30 days
-            const recent = GLOBAL.data.slice(-30).reverse();
-            recent.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-            <td>${row.date}</td>
-            <td>${row.original.toFixed(2)} ${GLOBAL.meta.currency}</td>
-            <td>${row.fx.toFixed(4)}</td>
-            <td style="font-weight:600">${row.converted.toFixed(2)} ${GLOBAL.targetCurrency}</td>
-        `;
-                tbody.appendChild(tr);
-            });
+            // Show Dual Axis button only if at least one currency differs from base
+            const dualAxisToggle = el('dual-axis-toggle');
+            const hasDifferentCurrency = GLOBAL.series.some(s => s.currency !== GLOBAL.baseMeta.currency);
+            if (hasDifferentCurrency) {
+                dualAxisToggle.classList.remove('hidden');
+                // Sync switch state
+                document.querySelectorAll('#dual-axis-toggle .toggle-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.axis === (GLOBAL.showDualAxis ? 'on' : 'off'));
+                });
+            } else {
+                dualAxisToggle.classList.add('hidden');
+                GLOBAL.showDualAxis = false;
+            }
 
-            // Default Range
             setRange('MAX');
         }
 
+        function setViewMode(mode) {
+            GLOBAL.chartMode = mode;
+            document.querySelectorAll('#view-toggle .toggle-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.view === mode);
+            });
+
+            const activeRangeBtn = document.querySelector('.range-btn.active');
+            const currentRange = activeRangeBtn ? activeRangeBtn.dataset.range : 'MAX';
+            setRange(currentRange);
+        }
+
+        function setDualAxis(enabled) {
+            GLOBAL.showDualAxis = enabled;
+            document.querySelectorAll('#dual-axis-toggle .toggle-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.axis === (enabled ? 'on' : 'off'));
+            });
+
+            // Redraw chart with current range
+            const activeRangeBtn = document.querySelector('.range-btn.active');
+            const currentRange = activeRangeBtn ? activeRangeBtn.dataset.range : 'MAX';
+            setRange(currentRange);
+        }
+
         function setRange(range) {
-            // Buttons
             document.querySelectorAll('.range-btn').forEach(b => {
                 b.classList.toggle('active', b.dataset.range === range);
             });
 
-            if (!GLOBAL.data.length) return;
+            if (!GLOBAL.series.length) return;
 
-            // Filter
             const now = new Date();
             let cutoff;
-
-            if (range === 'MAX') {
-                cutoff = new Date('1900-01-01');
-            } else if (range === 'YTD') {
-                cutoff = new Date(now.getFullYear(), 0, 1);
-            } else {
-                // For other ranges, we subtract from NOW
+            if (range === 'MAX') cutoff = new Date('1900-01-01');
+            else if (range === 'YTD') cutoff = new Date(now.getFullYear(), 0, 1);
+            else {
                 cutoff = new Date(now);
                 if (range === '5Y') cutoff.setFullYear(now.getFullYear() - 5);
                 else if (range === '3Y') cutoff.setFullYear(now.getFullYear() - 3);
@@ -798,132 +963,234 @@
                 else if (range === '1M') cutoff.setMonth(now.getMonth() - 1);
             }
 
-            const filtered = GLOBAL.data.filter(d => new Date(d.date) >= cutoff);
+            const filteredSeries = GLOBAL.series.map(s => {
+                const filteredData = s.data.filter(d => new Date(d.date) >= cutoff);
+                return { ...s, data: filteredData };
+            }).filter(s => s.data.length > 1);
 
-            drawChart(filtered);
-            updateStats(filtered[0], filtered[filtered.length - 1]);
+            drawChart(filteredSeries);
+            updateStats(filteredSeries);
+            renderTable(filteredSeries);
         }
 
-        function updateStats(start, end) {
-            if (!start || !end) return;
+        function updateStats(seriesList) {
+            const container = el('stats-rows');
+            container.innerHTML = '';
+            seriesList.forEach(s => {
+                const start = s.data[0];
+                const end = s.data[s.data.length - 1];
+                const change = end.converted - start.converted;
+                const pct = (change / start.converted) * 100;
+                const sign = change >= 0 ? '+' : '';
+                const cssClass = change >= 0 ? 'pos' : 'neg';
 
-            const vStart = start.converted;
-            const vEnd = end.converted;
-            const change = vEnd - vStart;
-            const pct = (change / vStart) * 100;
-
-            el('val-start').textContent = formatMoney(vStart, GLOBAL.targetCurrency);
-            el('date-start').textContent = start.date;
-
-            el('val-end').textContent = formatMoney(vEnd, GLOBAL.targetCurrency);
-            el('date-end').textContent = end.date;
-
-            const elChange = el('val-change');
-            const sign = change >= 0 ? '+' : '';
-            elChange.className = 'stat-value ' + (change >= 0 ? 'pos' : 'neg');
-            elChange.textContent = `${sign}${formatMoney(change, GLOBAL.targetCurrency)} (${sign}${pct.toFixed(2)}%)`;
-
-            // Secondary Return (Original Currency)
-            const elChangeAlt = el('val-change-alt');
-            // Show if Target is NOT USD (and optionally checking if base is USD or just display base return)
-            // The request said: "add the total return of usd if the currency selected isnt USD" 
-            // We'll show the Base Currency return if Target != Base (and usually Base is USD).
-            // Actually, specifically if Target != USD.
-            if (GLOBAL.targetCurrency !== 'USD' && start.original != null && end.original != null) {
-                const vStartOrig = start.original;
-                const vEndOrig = end.original;
-                const changeOrig = vEndOrig - vStartOrig;
-                const pctOrig = (changeOrig / vStartOrig) * 100;
-                const signOrig = changeOrig >= 0 ? '+' : '';
-
-                elChangeAlt.innerHTML = `<span class="${changeOrig >= 0 ? 'pos' : 'neg'}">${signOrig}${formatMoney(changeOrig, GLOBAL.meta.currency)} (${signOrig}${pctOrig.toFixed(2)}%)</span>`;
-            } else {
-                elChangeAlt.textContent = '';
-            }
+                const row = document.createElement('div');
+                row.className = 'stats-row';
+                row.style.borderLeftColor = s.color;
+                row.innerHTML = `
+                    <div style="color:${s.color}" class="stat-currency-label">${s.currency}</div>
+                    <div><div class="stat-value">${formatMoney(start.converted, s.currency)}</div><div class="stat-sub">${start.date}</div></div>
+                    <div><div class="stat-value">${formatMoney(end.converted, s.currency)}</div><div class="stat-sub">${end.date}</div></div>
+                    <div><div class="stat-value ${cssClass}">${sign}${pct.toFixed(2)}%</div><div class="stat-sub">${sign}${formatMoney(change, s.currency)}</div></div>
+                `;
+                container.appendChild(row);
+            });
         }
 
-        function drawChart(data) {
-            const dates = data.map(d => d.date);
-            const prices = data.map(d => d.converted);
+        function drawChart(seriesList) {
+            const count = seriesList.length;
+            if (count === 0) return;
 
-            const trace = {
-                x: dates,
-                y: prices,
-                type: 'scatter',
-                mode: 'lines',
-                line: { color: '#2563eb', width: 2 },
-                fill: 'tozeroy',
-                fillcolor: 'rgba(37, 99, 235, 0.05)',
-                name: 'Value'
-            };
+            // If only 1, force overlay mode (or just single chart) for simplicity
+            // But logic supports stacked of 1.
+
+            const isStacked = (GLOBAL.chartMode === 'stacked') && (count > 1);
+
+            const baseHeight = 400;
+            const extraHeight = 250;
+            const totalHeight = isStacked ? (baseHeight + (count - 1) * extraHeight) : 500;
 
             const layout = {
                 autosize: true,
-                height: 500,
-                margin: { l: 50, r: 20, t: 30, b: 40 },
-                showlegend: false,
-                xaxis: {
-                    showgrid: false,
-                    zeroline: false,
-                    fixedrange: true // Disable zoom on axis to encourage range slider or cleaner UX
-                },
-                yaxis: {
-                    showgrid: true,
-                    gridcolor: '#f1f5f9',
-                    zeroline: false,
-                    fixedrange: true
-                },
+                height: totalHeight,
+                margin: { l: 60, r: 20, t: 50, b: 50 },
+                showlegend: !isStacked,
+                legend: { orientation: 'h', y: 1.1 },
                 hovermode: 'x unified',
-                dragmode: 'select', // Enable selection for the measurement tool
+                dragmode: 'select',
                 selectdirection: 'h'
             };
 
-            const config = {
-                responsive: true,
-                displayModeBar: false
-            };
+            const traces = [];
 
-            Plotly.newPlot('chart', [trace], layout, config).then(gd => {
-                // Selection Handler
+            if (isStacked) {
+                layout.grid = { rows: count, columns: 1, pattern: 'independent' };
+                seriesList.forEach((s, i) => {
+                    const axisId = (i === 0) ? '' : (i + 1);
+
+                    // Add converted currency trace
+                    traces.push({
+                        x: s.data.map(d => d.date),
+                        y: s.data.map(d => d.converted),
+                        xaxis: `x${axisId}`, yaxis: `y${axisId}`,
+                        type: 'scatter', mode: 'lines',
+                        line: { color: s.color, width: 2 },
+                        name: s.currency,
+                        fill: 'tozeroy', fillcolor: s.color + '10',
+                        hovertemplate: `<b>${s.currency}</b>: %{y:.2f}<extra></extra>`
+                    });
+
+                    // Add base currency trace if dual axis is enabled and currency differs
+                    if (GLOBAL.showDualAxis && s.currency !== GLOBAL.baseMeta.currency) {
+                        // Create unique secondary axis ID that doesn't conflict with primary axes
+                        // Primary axes use: y, y2, y3, ... y{count}
+                        // Secondary axes should use: y{count+1}, y{count+2}, y{count+3}, etc.
+                        const secondaryAxisNumber = count + 1 + i;
+                        const yaxis2Id = `y${secondaryAxisNumber}`;
+
+                        traces.push({
+                            x: s.data.map(d => d.date),
+                            y: s.data.map(d => d.original),
+                            xaxis: `x${axisId}`,
+                            yaxis: yaxis2Id,
+                            type: 'scatter', mode: 'lines',
+                            line: { color: '#94a3b8', width: 2, dash: 'dot' },
+                            name: `${GLOBAL.baseMeta.currency} (Base)`,
+                            showlegend: i === 0, // Only show in legend once
+                            hovertemplate: `<b>${GLOBAL.baseMeta.currency}</b>: %{y:.2f}<extra></extra>`
+                        });
+
+                        // Configure secondary y-axis for this subplot
+                        // Use 'yaxis' prefix for layout keys (e.g., 'yaxis4', 'yaxis5')
+                        const layoutKey = `yaxis${secondaryAxisNumber}`;
+                        layout[layoutKey] = {
+                            overlaying: `y${axisId}`,
+                            side: 'right',
+                            showgrid: false,
+                            zeroline: false,
+                            fixedrange: true,
+                            anchor: `x${axisId}`
+                        };
+                    }
+
+                    // Configure primary y-axis
+                    layout[`yaxis${axisId}`] = {
+                        title: { text: s.currency, font: { color: s.color, weight: 'bold' } },
+                        showgrid: true, gridcolor: '#f1f5f9', zeroline: false, fixedrange: true,
+                    };
+
+                    // Configure x-axis
+                    layout[`xaxis${axisId}`] = {
+                        showgrid: false, zeroline: false, matches: 'x',
+                        showticklabels: i === count - 1,
+                    };
+                });
+
+                // Adjust right margin if dual axis is enabled
+                if (GLOBAL.showDualAxis) {
+                    layout.margin.r = 60;
+                }
+            } else {
+                // Overlay Mode
+                seriesList.forEach((s) => {
+                    traces.push({
+                        x: s.data.map(d => d.date),
+                        y: s.data.map(d => d.converted),
+                        type: 'scatter', mode: 'lines',
+                        line: { color: s.color, width: 2 },
+                        name: s.currency,
+                        fill: 'tozeroy', fillcolor: s.color + '05',
+                        hovertemplate: `<b>${s.currency}</b>: %{y:.2f}<extra></extra>`,
+                        yaxis: 'y1'
+                    });
+                });
+
+                // Add dual axis trace if enabled and currency differs from base
+                if (GLOBAL.showDualAxis && seriesList.length > 0) {
+                    const firstSeries = seriesList[0];
+                    // Check if any series has different currency from base
+                    const hasDifferentCurrency = seriesList.some(s => s.currency !== GLOBAL.baseMeta.currency);
+
+                    if (hasDifferentCurrency) {
+                        traces.push({
+                            x: firstSeries.data.map(d => d.date),
+                            y: firstSeries.data.map(d => d.original),
+                            type: 'scatter', mode: 'lines',
+                            line: { color: '#94a3b8', width: 2, dash: 'dot' },
+                            name: `${GLOBAL.baseMeta.currency} (Base)`,
+                            hovertemplate: `<b>${GLOBAL.baseMeta.currency}</b>: %{y:.2f}<extra></extra>`,
+                            yaxis: 'y2'
+                        });
+
+                        // Configure dual axis layout
+                        layout.margin.r = 60;
+                        layout.yaxis2 = {
+                            title: `${GLOBAL.baseMeta.currency} (Base)`,
+                            overlaying: 'y',
+                            side: 'right',
+                            showgrid: false,
+                            zeroline: false,
+                            fixedrange: true
+                        };
+                    }
+                }
+
+                layout.xaxis = { showgrid: false, zeroline: false, fixedrange: true };
+                layout.yaxis = { showgrid: true, gridcolor: '#f1f5f9', zeroline: false, fixedrange: true };
+            }
+
+            const config = { responsive: true, displayModeBar: false };
+            Plotly.newPlot('chart', traces, layout, config).then(gd => {
                 gd.on('plotly_selected', (event) => {
-                    if (event && event.range) {
-                        const xRange = event.range.x;
-                        const startDate = xRange[0];
-                        const endDate = xRange[1];
-
-                        // Filter data within selection
-                        const subset = data.filter(d => d.date >= startDate && d.date <= endDate);
-                        if (subset.length > 1) {
-                            updateStats(subset[0], subset[subset.length - 1]);
+                    const r = event?.range;
+                    if (r) {
+                        const xRange = r.x || r.x2 || r.x3;
+                        if (xRange) {
+                            const [startDate, endDate] = xRange;
+                            const subset = GLOBAL.series.map(s => ({
+                                ...s,
+                                data: s.data.filter(d => d.date >= startDate && d.date <= endDate)
+                            })).filter(s => s.data.length > 1);
+                            updateStats(subset);
                         }
-                    } else {
-                        // Deselect / Reset
-                        updateStats(data[0], data[data.length - 1]);
                     }
                 });
-
-                // Double Click Handler
                 gd.on('plotly_doubleclick', () => {
-                    updateStats(data[0], data[data.length - 1]);
-                });
-                // Click to reset logic if needed
-                gd.on('plotly_click', () => {
-                    // Optional: reset stats on single click elsewhere? 
-                    // Usually better to stick to explicit behavior.
+                    const activeBtn = document.querySelector('.range-btn.active');
+                    if (activeBtn) setRange(activeBtn.dataset.range);
                 });
             });
         }
 
-        function toggleTable() {
-            const table = el('table-container');
-            const isHidden = table.classList.toggle('hidden');
-            const btnText = el('table-toggle-text');
-            if (btnText) {
-                btnText.textContent = isHidden ? "Show Data Table" : "Hide Data Table";
+        function renderTable(seriesList) {
+            if (seriesList.length === 0) return;
+            const tableHead = document.querySelector('#dataTable thead');
+            const tableBody = document.querySelector('#dataTable tbody');
+            let headerHTML = `<tr><th>Date</th><th>Original (${GLOBAL.baseMeta.currency})</th>`;
+            seriesList.forEach(s => { headerHTML += `<th style="color:${s.color}">${s.currency} Price</th>`; });
+            headerHTML += `</tr>`;
+            tableHead.innerHTML = headerHTML;
+            const masterLength = seriesList[0].data.length;
+            const startIndex = Math.max(0, masterLength - 30);
+            let bodyHTML = '';
+            for (let i = masterLength - 1; i >= startIndex; i--) {
+                const date = seriesList[0].data[i].date;
+                const original = seriesList[0].data[i].original;
+                bodyHTML += `<tr><td>${date}</td><td>${original.toFixed(2)}</td>`;
+                seriesList.forEach(s => {
+                    const point = s.data[i];
+                    bodyHTML += `<td style="font-weight:600">${point ? point.converted.toFixed(2) : '-'}</td>`;
+                });
+                bodyHTML += `</tr>`;
             }
+            tableBody.innerHTML = bodyHTML;
         }
 
-        // Enter Key Support
+        function toggleTable() {
+            const i = el('table-container').classList.toggle('hidden');
+            el('table-toggle-text').textContent = i ? "Show Data Table" : "Hide Data Table";
+        }
+
         el('ticker').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
         el('targetCurrency').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
 
