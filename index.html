@@ -14,36 +14,30 @@
 
     <style>
         :root {
-            /* Colors */
             --primary: #0f172a;
             --primary-light: #334155;
             --bg-page: #f8fafc;
-            --bg-card: #ffffff;
+            --bg-card: #fff;
             --border: #e2e8f0;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --success: #10b981;
             --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow: 0 4px 6px -1px #0002, 0 2px 4px -2px #0002;
             --radius: 12px;
-
-            /* Chart Colors */
-            --color-0: #2563eb;
-            /* Blue */
-            --color-1: #10b981;
-            /* Emerald */
-            --color-2: #f59e0b;
-            /* Amber */
+            --c0: #2563eb;
+            --c1: #10b981;
+            --c2: #f59e0b;
         }
 
         * {
             box-sizing: border-box;
-            outline: none;
+            outline: 0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-page);
+            background: var(--bg-page);
             color: var(--text-main);
             margin: 0;
             padding: 10px;
@@ -55,7 +49,6 @@
             margin: 0 auto;
         }
 
-        /* --- Header --- */
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -65,17 +58,16 @@
         h1 {
             font-weight: 700;
             font-size: 2rem;
-            margin: 0 0 8px 0;
+            margin: 0 0 8px;
             color: var(--primary);
             letter-spacing: -0.02em;
         }
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: .9rem;
         }
 
-        /* --- Controls Section --- */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -104,7 +96,7 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.75rem;
+            font-size: .75rem;
             color: var(--text-muted);
             font-weight: 600;
             pointer-events: none;
@@ -113,7 +105,6 @@
             height: 14px;
             line-height: 14px;
             margin-top: -19px;
-            /* Floating label style */
         }
 
         input {
@@ -122,7 +113,7 @@
             font-size: 1rem;
             border: 1px solid var(--border);
             border-radius: 8px;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: .2s;
             color: var(--primary);
             font-weight: 500;
             text-transform: uppercase;
@@ -130,47 +121,47 @@
 
         input::placeholder {
             color: var(--text-muted);
-            opacity: 0.4;
+            opacity: .4;
             text-transform: none;
         }
 
         input:focus {
-            border-color: var(--color-0);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--c0);
+            box-shadow: 0 0 0 3px #2563eb1a;
         }
 
         .btn-primary {
-            background-color: var(--color-0);
-            color: white;
-            border: none;
+            background: var(--c0);
+            color: #fff;
+            border: 0;
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: .2s;
             font-size: 1rem;
             min-width: 120px;
         }
 
         .btn-primary:hover {
-            opacity: 0.9;
+            opacity: .9;
         }
 
         .btn-primary:disabled {
-            opacity: 0.7;
+            opacity: .7;
             cursor: not-allowed;
         }
 
         .btn-secondary {
-            background-color: transparent;
+            background: 0 0;
             color: var(--text-muted);
             border: 1px solid var(--border);
             padding: 8px 16px;
             border-radius: 8px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
+            transition: .2s;
+            font-size: .9rem;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -178,9 +169,8 @@
 
         .btn-secondary:hover {
             color: var(--primary);
-            border-color: var(--color-0);
-            background-color: var(--bg-card);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            border-color: var(--c0);
+            box-shadow: 0 1px 2px #0000000d;
         }
 
         .btn-secondary svg {
@@ -188,7 +178,6 @@
             height: 16px;
         }
 
-        /* --- Stock Info & Stats --- */
         .meta-header {
             display: flex;
             justify-content: space-between;
@@ -206,19 +195,19 @@
             color: var(--primary);
         }
 
-        .stock-title .ticker-badge {
+        .ticker-badge {
             background: var(--primary-light);
-            color: white;
+            color: #fff;
             padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: .8rem;
             vertical-align: middle;
             margin-right: 4px;
         }
 
         .currency-info {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: .9rem;
             margin-top: 4px;
         }
 
@@ -228,31 +217,29 @@
             gap: 16px;
         }
 
-        .stats-row {
+        .stats-row,
+        .stats-row-header {
             display: grid;
             grid-template-columns: 100px 1fr 1fr 1fr;
-            /* Currency Label | Start | End | Return */
             gap: 16px;
             align-items: center;
             padding: 12px;
             background: var(--bg-page);
             border-radius: 8px;
             border-left: 4px solid transparent;
-            /* Colored border */
         }
 
         .stats-row-header {
-            display: grid;
-            grid-template-columns: 100px 1fr 1fr 1fr;
-            gap: 16px;
-            padding: 0 12px 8px 12px;
-            font-size: 0.75rem;
+            padding: 0 12px 8px;
+            font-size: .75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: .05em;
             font-weight: 600;
             border-bottom: 1px solid var(--border);
             margin-bottom: 8px;
+            background: 0 0;
+            border-left: 0;
         }
 
         .stat-currency-label {
@@ -267,9 +254,8 @@
         }
 
         .stat-sub {
-            font-size: 0.75rem;
+            font-size: .75rem;
             color: var(--text-muted);
-            font-weight: 400;
             margin-top: 2px;
         }
 
@@ -281,7 +267,6 @@
             color: var(--danger);
         }
 
-        /* --- Chart Section --- */
         .chart-header {
             display: flex;
             justify-content: space-between;
@@ -302,7 +287,6 @@
             font-weight: 600;
         }
 
-        /* Wrapper for all toggle controls */
         .toggle-controls {
             display: flex;
             gap: 16px;
@@ -318,25 +302,24 @@
         }
 
         .toggle-btn {
-            background: transparent;
-            border: none;
+            background: 0 0;
+            border: 0;
             padding: 4px 10px;
-            font-size: 0.8rem;
+            font-size: .8rem;
             color: var(--text-muted);
             cursor: pointer;
             border-radius: 4px;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: .2s;
         }
 
         .toggle-btn.active {
             background: #fff;
-            color: var(--color-0);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            color: var(--c0);
+            box-shadow: 0 1px 2px #0001;
             font-weight: 600;
         }
 
-        /* Icon-only toggle button */
         .toggle-btn-icon {
             padding: 4px;
             min-width: 48px;
@@ -355,10 +338,6 @@
             color: var(--primary);
         }
 
-        .toggle-btn.active:hover {
-            color: var(--color-0);
-        }
-
         .time-ranges {
             display: flex;
             background: var(--bg-page);
@@ -368,10 +347,10 @@
         }
 
         .range-btn {
-            background: transparent;
-            border: none;
+            background: 0 0;
+            border: 0;
             padding: 6px 12px;
-            font-size: 0.85rem;
+            font-size: .85rem;
             color: var(--text-muted);
             cursor: pointer;
             border-radius: 6px;
@@ -384,13 +363,12 @@
 
         .range-btn.active {
             background: var(--bg-card);
-            color: var(--color-0);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            color: var(--c0);
+            box-shadow: 0 1px 2px #0000000d;
         }
 
         #chart {
             width: 100%;
-            /* Removed fixed height to allow auto-expansion */
             min-height: 500px;
             border-radius: 4px;
             overflow: hidden;
@@ -398,7 +376,7 @@
 
         .chart-hint {
             text-align: center;
-            font-size: 0.85rem;
+            font-size: .85rem;
             color: var(--text-muted);
             margin-top: 12px;
             display: flex;
@@ -407,15 +385,13 @@
             gap: 6px;
         }
 
-        /* --- Table Section --- */
         .details-toggle {
             text-align: center;
             margin: 20px 0;
         }
 
         .table-responsive {
-            overflow-x: auto;
-            overflow-y: auto;
+            overflow: auto;
             max-height: 400px;
             border-radius: 8px;
             border: 1px solid var(--border);
@@ -424,7 +400,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: .85rem;
             white-space: nowrap;
         }
 
@@ -471,7 +447,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.9rem;
+            font-size: .9rem;
             border: 1px solid transparent;
         }
 
@@ -483,15 +459,15 @@
 
         .status-msg.loading {
             background: #eff6ff;
-            color: var(--color-0);
+            color: var(--c0);
             border-color: #bfdbfe;
         }
 
         .spinner {
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(37, 99, 235, 0.2);
-            border-top-color: var(--color-0);
+            border: 2px solid #2563eb33;
+            border-top-color: var(--c0);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -502,19 +478,18 @@
             }
         }
 
-        /* --- Interpretation Footnote --- */
         .interpretation-card {
             margin-top: 20px;
             padding: 16px;
             background: #f0f9ff;
             border: 1px solid #bae6fd;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: .85rem;
             color: #0369a1;
         }
 
         .interpretation-card h4 {
-            margin: 0 0 10px 0;
+            margin: 0 0 10px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -530,22 +505,17 @@
             margin-bottom: 8px;
         }
 
-        .interpretation-card li:last-child {
-            margin-bottom: 0;
-        }
-
         .interpretation-card .highlight {
             font-weight: 600;
             color: #0c4a6e;
         }
 
         @media (max-width: 600px) {
-            .meta-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
 
-            .input-group {
+            .meta-header,
+            .input-group,
+            .chart-header,
+            .header-controls {
                 flex-direction: column;
                 align-items: stretch;
             }
@@ -554,7 +524,6 @@
             .stats-row-header {
                 grid-template-columns: 1fr;
                 gap: 8px;
-                text-align: left;
             }
 
             .stats-row>div,
@@ -564,715 +533,430 @@
                 width: 100%;
             }
 
-            /* Chart Header Mobile - switch back to Flex Column */
-            .chart-header {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .header-controls {
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                gap: 12px;
-            }
-
-            .chart-title {
-                text-align: center;
-            }
-
-            .toggle-controls {
-                justify-content: center;
-            }
-
+            .chart-header,
+            .header-controls,
+            .chart-title,
+            .toggle-controls,
             .time-ranges {
+                align-items: center;
+                text-align: center;
                 justify-content: center;
-                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 
-<body>
 
-    <div class="container">
-        <header>
-            <h1>FX-Adjusted Ticker</h1>
-            <div class="subtitle">Visualize the impact of exchange rates on your returns</div>
-        </header>
+<svg style="display:none">
+    <symbol id="i-ov" viewBox="0 0 16 16">
+        <rect x="3" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1" />
+        <rect x="5" y="5" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1" />
+    </symbol>
+    <symbol id="i-st" viewBox="0 0 16 16">
+        <path d="M2 4h12M3 7h10M4 10h8" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+        <path d="M2 4l1 3 1 3 1 3h6l1-3 1-3 1-3z" fill="none" stroke="currentColor" stroke-width="1"
+            stroke-linejoin="round" />
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16">
+        <path d="M1 8s3-4.5 7-4.5 7 4.5 7 4.5-3 4.5-7 4.5-7-4.5-7-4.5z" fill="none" stroke="currentColor"
+            stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="8" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1" />
+        <text x="8" y="10.2" text-anchor="middle" font-size="6.5" font-weight="800" fill="currentColor"
+            stroke="none">$</text>
+    </symbol>
+    <symbol id="i-eye-off" viewBox="0 0 16 16">
+        <use href="#i-eye" />
+        <line x1="3" y1="3" x2="13" y2="13" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+    </symbol>
+    <symbol id="i-hint" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" stroke="currentColor" fill="none"
+            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" stroke="currentColor" fill="none"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" stroke="currentColor" fill="none"
+            d="M4 6h16M4 12h16M4 18h16" />
+    </symbol>
+</svg>
 
-        <!-- Main Controls -->
-        <div class="card">
-            <div class="input-group">
-                <div class="input-wrapper">
-                    <input id="ticker" type="text" placeholder="eg. AAPL">
-                    <span class="input-label">TICKER</span>
-                </div>
+<div class="container">
+    <header>
+        <h1>FX-Adjusted Ticker</h1>
+        <div class="subtitle">Visualize the impact of exchange rates on your returns</div>
+    </header>
 
-                <div style="color: var(--text-muted); font-weight: bold; font-size: 0.8rem;">IN</div>
-
-                <div class="input-wrapper">
-                    <input id="targetCurrency" type="text" placeholder="eg. USD,EUR,GBP">
-                    <span class="input-label">CURRENCY</span>
-                </div>
-
-                <button id="btn-run" class="btn-primary" onclick="runApp()">View Chart</button>
-            </div>
-        </div>
-
-        <!-- Status Area -->
-        <div id="status-area" class="status-msg hidden"></div>
-
-        <!-- Results Area -->
-        <div id="results-area" class="hidden">
-
-            <!-- Stats Card -->
-            <div class="card">
-                <div class="meta-header">
-                    <div class="stock-title">
-                        <h2 id="meta-name">-</h2>
-                        <div class="currency-info">
-                            <span id="meta-symbol" class="ticker-badge">-</span>
-                            Base: <span id="meta-base">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="stats-area">
-                    <div class="stats-row-header hidden-mobile">
-                        <div>Target</div>
-                        <div>Starting Value</div>
-                        <div>Ending Value</div>
-                        <div>Total Return</div>
-                    </div>
-                    <div id="stats-rows" class="stats-container"></div>
-                </div>
-            </div>
-
-            <!-- Chart Card -->
-            <div class="card">
-                <div class="chart-header">
-                    <div class="chart-title">Performance History</div>
-
-                    <div class="header-controls">
-                        <div class="toggle-controls">
-                            <div id="view-toggle" class="toggle-group hidden">
-                                <button class="toggle-btn toggle-btn-icon active" onclick="setViewMode('overlay')"
-                                    data-view="overlay" title="Overlay View">
-                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                        <rect x="3" y="3" width="8" height="8" rx="1" stroke-width="1" />
-                                        <rect x="5" y="5" width="8" height="8" rx="1" stroke-width="1" />
-                                    </svg>
-                                </button>
-                                <button class="toggle-btn toggle-btn-icon" onclick="setViewMode('stacked')"
-                                    data-view="stacked" title="Stacked View">
-                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                        <path d="M2 4h12M3 7h10M4 10h8" stroke-width="1" stroke-linecap="round" />
-                                        <path d="M2 4l1 3l1 3l1 3h6l1-3l1-3l1-3z" stroke-width="1"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div id="dual-axis-toggle" class="toggle-group hidden">
-                                <button class="toggle-btn toggle-btn-icon active" onclick="setDualAxis(false)"
-                                    id="btn-dual-axis-off" data-axis="off" title="Hide Base Currency">
-                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                        <path d="M1 8s3-4.5 7-4.5 7 4.5 7 4.5-3 4.5-7 4.5-7-4.5-7-4.5z" stroke-width="1"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <circle cx="8" cy="8" r="4" stroke-width="1" />
-                                        <text x="8" y="10.2" text-anchor="middle" font-size="6.5" font-weight="800"
-                                            fill="currentColor" stroke="none">$</text>
-                                        <line x1="3" y1="3" x2="13" y2="13" stroke-width="1.2" stroke-linecap="round" />
-                                    </svg>
-                                </button>
-                                <button class="toggle-btn toggle-btn-icon" onclick="setDualAxis(true)"
-                                    id="btn-dual-axis-on" data-axis="on" title="Show Base Currency">
-                                    <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                        <path d="M1 8s3-4.5 7-4.5 7 4.5 7 4.5-3 4.5-7 4.5-7-4.5-7-4.5z" stroke-width="1"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <circle cx="8" cy="8" r="4" stroke-width="1" />
-                                        <text x="8" y="10.2" text-anchor="middle" font-size="6.5" font-weight="800"
-                                            fill="currentColor" stroke="none">$</text>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="time-ranges">
-                            <button class="range-btn" onclick="setRange('1M')" data-range="1M">1M</button>
-                            <button class="range-btn" onclick="setRange('6M')" data-range="6M">6M</button>
-                            <button class="range-btn" onclick="setRange('YTD')" data-range="YTD">YTD</button>
-                            <button class="range-btn" onclick="setRange('1Y')" data-range="1Y">1Y</button>
-                            <button class="range-btn" onclick="setRange('3Y')" data-range="3Y">3Y</button>
-                            <button class="range-btn" onclick="setRange('5Y')" data-range="5Y">5Y</button>
-                            <button class="range-btn active" onclick="setRange('MAX')" data-range="MAX">Max</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="chart"></div>
-
-                <div class="chart-hint">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>Tip: Drag to measure. Double-click to reset.</span>
-                </div>
-
-                <!-- Interpretation Footnote -->
-                <div id="interpretation-section" class="interpretation-card hidden">
-                    <h4>
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        How to read the Dual-Axis Chart
-                    </h4>
-                    <ul>
-                        <li><span class="highlight">Comparing Performance:</span> The dotted line is the stock price in
-                            its original currency (e.g., USD). Compare it with the solid line to see if the exchange
-                            rate is helping or hurting your returns.</li>
-                        <li><span class="highlight">When lines cross:</span> If the solid line (e.g., MYR) is <span
-                                class="highlight">above</span> the dotted line, the <span class="highlight">Target
-                                Currency (e.g., MYR) has weakened</span> against the Base (e.g., USD). This makes your
-                            stock more
-                            valuable when converted back.</li>
-                        <li><span class="highlight">Market vs. Currency:</span> If the dotted line goes up but the solid
-                            line stays flat, your stock gains were cancelled out because the <span
-                                class="highlight">Target Currency (e.g., MYR) strengthened</span> against the Base
-                            (e.g., USD).</li>
-                        <li><span class="highlight">Understanding the Gap:</span> A <span class="highlight">small
-                                gap</span> means the currency is stable and returns are mostly from the stock. A <span
-                                class="highlight">large gap</span> means significant currency movement is either
-                            boosting or dragging your final value.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Data Table -->
-            <div class="details-toggle">
-                <button class="btn-secondary" onclick="toggleTable()">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <span id="table-toggle-text">Show Data Table</span>
-                </button>
-            </div>
-
-            <div id="table-container" class="card hidden">
-                <h3 style="margin-top:0; border-bottom:1px solid var(--border); padding-bottom:12px;">Recent Data (30
-                    Days)</h3>
-                <div class="table-responsive">
-                    <table id="dataTable">
-                        <thead></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
+    <div class="card">
+        <div class="input-group">
+            <div class="input-wrapper"><input id="ticker" type="text" placeholder="eg. AAPL"><span
+                    class="input-label">TICKER</span></div>
+            <div style="color:var(--text-muted);font-weight:700;font-size:.8rem">IN</div>
+            <div class="input-wrapper"><input id="targetCurrency" type="text" placeholder="eg. USD,EUR,GBP"><span
+                    class="input-label">CURRENCY</span></div>
+            <button id="btn-run" class="btn-primary" onclick="runApp()">View Chart</button>
         </div>
     </div>
 
-    <script>
-        // --- Configuration ---
-        const PROXY_URL = 'https://corsproxy.io/?';
-        const YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/';
-        const CHART_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#7c3aed', '#ec4899'];
+    <div id="status-area" class="status-msg hidden"></div>
 
-        // --- State ---
-        let GLOBAL = {
-            baseMeta: { symbol: '', currency: '', longName: '' },
-            series: [],
-            chartMode: 'overlay', // or 'stacked'
-            chartInstance: null,
-            showDualAxis: false
+    <div id="results-area" class="hidden">
+        <div class="card">
+            <div class="meta-header">
+                <div class="stock-title">
+                    <h2 id="meta-name">-</h2>
+                    <div class="currency-info"><span id="meta-symbol" class="ticker-badge">-</span> Base: <span
+                            id="meta-base">-</span></div>
+                </div>
+            </div>
+            <div id="stats-area">
+                <div class="stats-row-header">
+                    <div>Target</div>
+                    <div>Starting Value</div>
+                    <div>Ending Value</div>
+                    <div>Total Return</div>
+                </div>
+                <div id="stats-rows" class="stats-container"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="chart-header">
+                <div class="chart-title">Performance History</div>
+                <div class="header-controls">
+                    <div class="toggle-controls">
+                        <div id="view-toggle" class="toggle-group hidden">
+                            <button class="toggle-btn toggle-btn-icon active" onclick="setViewMode('overlay')"
+                                data-view="overlay" title="Overlay View"><svg width="24" height="24" viewBox="0 0 16 16"
+                                    fill="none" stroke="currentColor">
+                                    <use href="#i-ov" />
+                                </svg></button>
+                            <button class="toggle-btn toggle-btn-icon" onclick="setViewMode('stacked')"
+                                data-view="stacked" title="Stacked View"><svg width="24" height="24" viewBox="0 0 16 16"
+                                    fill="none" stroke="currentColor">
+                                    <use href="#i-st" />
+                                </svg></button>
+                        </div>
+                        <div id="dual-axis-toggle" class="toggle-group hidden">
+                            <button class="toggle-btn toggle-btn-icon active" onclick="setDualAxis(false)"
+                                data-axis="off" title="Hide Base Currency"><svg width="24" height="24"
+                                    viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <use href="#i-eye-off" />
+                                </svg></button>
+                            <button class="toggle-btn toggle-btn-icon" onclick="setDualAxis(true)" data-axis="on"
+                                title="Show Base Currency"><svg width="24" height="24" viewBox="0 0 16 16" fill="none"
+                                    stroke="currentColor">
+                                    <use href="#i-eye" />
+                                </svg></button>
+                        </div>
+                    </div>
+                    <div class="time-ranges">
+                        <button class="range-btn" onclick="setRange('1M')" data-range="1M">1M</button>
+                        <button class="range-btn" onclick="setRange('6M')" data-range="6M">6M</button>
+                        <button class="range-btn" onclick="setRange('YTD')" data-range="YTD">YTD</button>
+                        <button class="range-btn" onclick="setRange('1Y')" data-range="1Y">1Y</button>
+                        <button class="range-btn" onclick="setRange('3Y')" data-range="3Y">3Y</button>
+                        <button class="range-btn" onclick="setRange('5Y')" data-range="5Y">5Y</button>
+                        <button class="range-btn active" onclick="setRange('MAX')" data-range="MAX">Max</button>
+                    </div>
+                </div>
+            </div>
+            <div id="chart"></div>
+            <div class="chart-hint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <use href="#i-hint" />
+                </svg><span>Tip: Drag to measure. Double-click to reset.</span></div>
+            <div id="interpretation-section" class="interpretation-card hidden">
+                <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <use href="#i-info" />
+                    </svg>How to read the Dual-Axis Chart</h4>
+                <ul>
+                    <li><span class="highlight">Comparing Performance:</span> The dotted line is the stock price in its
+                        original currency. Compare it with the solid line to see if the exchange rate is helping or
+                        hurting.</li>
+                    <li><span class="highlight">When lines cross:</span> If the solid line is <span
+                            class="highlight">above</span> the dotted line, the <span class="highlight">Target Currency
+                            has weakened</span> against the Base. This makes your stock more valuable when converted
+                        back.</li>
+                    <li><span class="highlight">Market vs. Currency:</span> If the dotted line goes up but the solid
+                        line stays flat, your stock gains were cancelled out because the <span class="highlight">Target
+                            Currency strengthened</span>.</li>
+                    <li><span class="highlight">Understanding the Gap:</span> A <span class="highlight">small gap</span>
+                        means the currency is stable. A <span class="highlight">large gap</span> means significant
+                        currency movement is boosting or dragging your final value.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="details-toggle"><button class="btn-secondary" onclick="toggleTable()"><svg width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <use href="#i-menu" />
+                </svg><span id="table-toggle-text">Show Data Table</span></button></div>
+        <div id="table-container" class="card hidden">
+            <h3 style="margin-top:0;border-bottom:1px solid var(--border);padding-bottom:12px">Recent Data (30 Days)
+            </h3>
+            <div class="table-responsive">
+                <table id="dataTable">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    const $ = id => document.getElementById(id),
+        YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/',
+        PROXY_URL = 'https://corsproxy.io/?',
+        CHART_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#7c3aed', '#ec4899'],
+        UI = {
+            ticker: $('ticker'),
+            currency: $('targetCurrency'),
+            run: $('btn-run'),
+            status: $('status-area'),
+            results: $('results-area'),
+            name: $('meta-name'),
+            symbol: $('meta-symbol'),
+            base: $('meta-base'),
+            viewT: $('view-toggle'),
+            dualT: $('dual-axis-toggle'),
+            inter: $('interpretation-section'),
+            stats: $('stats-rows'),
+            chart: $('chart'),
+            table: $('dataTable'),
+            tableC: $('table-container'),
+            tableT: $('table-toggle-text')
         };
 
-        const el = (id) => document.getElementById(id);
+    let G = { baseMeta: {}, series: [], mode: 'overlay', dual: false };
 
-        const formatMoney = (val, currency) => {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: currency,
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(val);
-        };
+    const fmt = (v, c) => new Intl.NumberFormat('en-US', { style: 'currency', currency: c }).format(v);
 
-        const showStatus = (msg, type = 'normal') => {
-            const box = el('status-area');
-            box.classList.remove('hidden', 'error', 'loading');
-            box.innerHTML = '';
-            if (type === 'error') {
-                box.classList.add('error');
-                box.innerHTML = `<strong>Error:</strong>&nbsp;${msg}`;
-            } else if (type === 'loading') {
-                box.classList.add('loading');
-                box.innerHTML = `<div class="spinner"></div>&nbsp;${msg}`;
-            } else {
-                box.innerHTML = msg;
+    const showS = (m, t = 'normal') => {
+        UI.status.className = `status-msg ${t === 'normal' ? '' : t}`;
+        UI.status.innerHTML = t === 'loading' ? `<div class="spinner"></div> ${m}` : (t === 'error' ? `<strong>Error:</strong> ${m}` : m);
+    };
+
+    async function fetchY(s) {
+        const r = await fetch(PROXY_URL + encodeURIComponent(`${YAHOO_BASE}${s}?range=10y&interval=1d`));
+        if (!r.ok) throw Error(`HTTP ${r.status}`);
+        const j = await r.json(), res = j.chart?.result?.[0];
+        if (!res) throw Error(`No data for ${s}`);
+        const ts = res.timestamp || [],
+            q = res.indicators.quote[0],
+            p = res.indicators.adjclose?.[0]?.adjclose || q.close || [],
+            m = res.meta;
+        const data = {}, dates = [];
+        ts.forEach((t, i) => {
+            if (p[i] != null) {
+                const d = new Date(t * 1000).toISOString().split('T')[0];
+                data[d] = p[i];
+                dates.push(d);
             }
-        };
+        });
+        return { symbol: m.symbol, currency: m.currency, longName: m.longName || m.shortName || m.symbol, data, dates };
+    }
 
-        const hideStatus = () => el('status-area').classList.add('hidden');
+    async function runApp() {
+        const tic = UI.ticker.value.trim().toUpperCase(),
+            raw = UI.currency.value.trim().toUpperCase();
+        let curs = raw.split(',').map(c => c.trim()).filter(c => c);
+        const lim = curs.length > 5;
+        if (lim) curs = curs.slice(0, 5);
 
-        async function fetchYahooSeries(symbol) {
-            const url = `${YAHOO_BASE}${symbol}?range=10y&interval=1d`;
-            const encodedUrl = PROXY_URL + encodeURIComponent(url);
-            try {
-                const response = await fetch(encodedUrl);
-                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-                const json = await response.json();
-                const result = json.chart?.result?.[0];
-                if (!result) throw new Error(`No data found for ${symbol}`);
+        if (!tic || !curs.length) return showS("Enter ticker and currency.", "error");
 
-                const timestamps = result.timestamp || [];
-                const adjClose = result.indicators?.adjclose?.[0]?.adjclose || [];
-                const quote = result.indicators?.quote?.[0] || {};
-                const close = quote.close || [];
-                const priceArray = adjClose.length > 0 ? adjClose : close;
-                const meta = result.meta || {};
-                const timeSeries = {};
-                const sortedDates = [];
+        UI.results.classList.add('hidden');
+        UI.run.disabled = true;
+        showS(`Fetching <b>${tic}</b>...`, "loading");
 
-                timestamps.forEach((ts, i) => {
-                    if (priceArray[i] != null) {
-                        const date = new Date(ts * 1000).toISOString().split('T')[0];
-                        timeSeries[date] = priceArray[i];
-                        sortedDates.push(date);
-                    }
-                });
+        try {
+            const s = await fetchY(tic);
+            G.baseMeta = { symbol: s.symbol, currency: s.currency, name: s.longName };
+            G.series = [];
 
-                return {
-                    symbol: meta.symbol,
-                    currency: meta.currency,
-                    shortName: meta.shortName,
-                    longName: meta.longName || meta.shortName || meta.symbol,
-                    data: timeSeries,
-                    dates: sortedDates
-                };
-            } catch (e) {
-                console.warn("Fetch Error details:", e);
-                throw e;
-            }
-        }
+            showS(`Processing currencies...`, "loading");
 
-        async function runApp() {
-            const tickerIn = el('ticker').value.trim().toUpperCase();
-            const rawCurrencyIn = el('targetCurrency').value.trim().toUpperCase();
-            let targetCurrencies = rawCurrencyIn.split(',').map(c => c.trim()).filter(c => c.length > 0);
-
-            let limitExceeded = false;
-            if (targetCurrencies.length > 5) {
-                limitExceeded = true;
-                targetCurrencies = targetCurrencies.slice(0, 5);
-            }
-
-            if (!tickerIn || targetCurrencies.length === 0) {
-                showStatus("Please enter a ticker symbol and at least one target currency.", "error");
-                return;
-            }
-
-            el('results-area').classList.add('hidden');
-            el('btn-run').disabled = true;
-            showStatus(`Fetching data for <b>${tickerIn}</b>...`, "loading");
-
-            GLOBAL.series = [];
-
-            try {
-                const stockRes = await fetchYahooSeries(tickerIn);
-                GLOBAL.baseMeta = {
-                    symbol: stockRes.symbol,
-                    currency: stockRes.currency,
-                    longName: stockRes.longName
-                };
-
-                showStatus(`Found <b>${stockRes.symbol}</b> (${stockRes.currency}). processing currencies...`, "loading");
-
-                for (let i = 0; i < targetCurrencies.length; i++) {
-                    const target = targetCurrencies[i];
-                    let fxMap = null;
-                    let inverted = false;
-
-                    if (target !== stockRes.currency) {
-                        try {
-                            const fxRes = await fetchYahooSeries(`${stockRes.currency}${target}=X`);
-                            fxMap = fxRes.data;
-                        } catch (e1) {
-                            try {
-                                const fxResInv = await fetchYahooSeries(`${target}${stockRes.currency}=X`);
-                                fxMap = fxResInv.data;
-                                inverted = true;
-                            } catch (e2) {
-                                throw new Error(`Currency '${target}' is not valid or no data available.`);
-                            }
-                        }
-                    }
-
-                    const seriesData = alignAndConvert(stockRes, fxMap, inverted);
-                    GLOBAL.series.push({
-                        currency: target,
-                        data: seriesData,
-                        color: CHART_COLORS[i % CHART_COLORS.length]
-                    });
-                }
-
-                if (GLOBAL.series.length > 0) {
-                    renderUI();
-                    if (limitExceeded) {
-                        showStatus("Displaying first 5 currencies (limit reached).", "normal");
-                    } else {
-                        hideStatus();
-                    }
-                } else {
-                    showStatus("Could not generate any data for the selected inputs.", "error");
-                }
-            } catch (err) {
-                showStatus(err.message, "error");
-            } finally {
-                el('btn-run').disabled = false;
-            }
-        }
-
-        function alignAndConvert(stockRes, fxMap, isInverted) {
-            const aligned = [];
-            let lastKnownFx = null;
-            stockRes.dates.forEach(date => {
-                const stockPrice = stockRes.data[date];
-                let fxRate = 1;
-
-                if (fxMap) {
-                    let rawFx = fxMap[date];
-                    if (rawFx == null && lastKnownFx !== null) rawFx = lastKnownFx;
-                    if (rawFx != null) {
-                        lastKnownFx = rawFx;
-                        fxRate = isInverted ? (1 / rawFx) : rawFx;
-                    } else {
-                        return;
+            for (let i = 0; i < curs.length; i++) {
+                const t = curs[i];
+                let fx = null, inv = false;
+                if (t !== s.currency) {
+                    try { fx = (await fetchY(`${s.currency}${t}=X`)).data; }
+                    catch {
+                        try { fx = (await fetchY(`${t}${s.currency}=X`)).data; inv = true; }
+                        catch { throw Error(`Invalid currency: ${t}`); }
                     }
                 }
-                aligned.push({ date: date, original: stockPrice, fx: fxRate, converted: stockPrice * fxRate });
-            });
-            return aligned;
-        }
 
-        // --- Rendering ---
-        function renderUI() {
-            el('results-area').classList.remove('hidden');
-            el('meta-name').textContent = GLOBAL.baseMeta.longName;
-            el('meta-symbol').textContent = GLOBAL.baseMeta.symbol;
-            el('meta-base').textContent = GLOBAL.baseMeta.currency;
+                let last = null;
+                const mapped = s.dates.map(d => {
+                    let r = fx ? (fx[d] ?? last) : 1;
+                    if (fx && fx[d] != null) last = fx[d];
+                    return r != null ? { d, o: s.data[d], c: s.data[d] * (inv ? 1 / r : r) } : null;
+                }).filter(x => x);
 
-            // Toggle Visibility based on count
-            const toggle = el('view-toggle');
-            if (GLOBAL.series.length > 1) {
-                toggle.classList.remove('hidden');
-            } else {
-                toggle.classList.add('hidden');
+                G.series.push({ cur: t, data: mapped, col: CHART_COLORS[i % 5] });
             }
 
-            // Show Dual Axis button only if at least one currency differs from base
-            const dualAxisToggle = el('dual-axis-toggle');
-            const hasDifferentCurrency = GLOBAL.series.some(s => s.currency !== GLOBAL.baseMeta.currency);
-            if (hasDifferentCurrency) {
-                dualAxisToggle.classList.remove('hidden');
-                // Sync switch state
-                document.querySelectorAll('#dual-axis-toggle .toggle-btn').forEach(b => {
-                    b.classList.toggle('active', b.dataset.axis === (GLOBAL.showDualAxis ? 'on' : 'off'));
-                });
-                // Show footnote if dual axis is on
-                el('interpretation-section').classList.toggle('hidden', !GLOBAL.showDualAxis);
-            } else {
-                dualAxisToggle.classList.add('hidden');
-                GLOBAL.showDualAxis = false;
-                el('interpretation-section').classList.add('hidden');
-            }
+            UI.results.classList.remove('hidden');
+            UI.name.textContent = G.baseMeta.name;
+            UI.symbol.textContent = G.baseMeta.symbol;
+            UI.base.textContent = G.baseMeta.currency;
+            UI.viewT.classList.toggle('hidden', G.series.length < 2);
 
+            const hasDiff = G.series.some(s => s.cur !== G.baseMeta.currency);
+            UI.dualT.classList.toggle('hidden', !hasDiff);
+            if (!hasDiff) G.dual = false;
+
+            syncDualUI();
             setRange('MAX');
+            lim ? showS("Limit: 5 currencies.") : UI.status.classList.add('hidden');
+        } catch (e) { showS(e.message, "error"); }
+        finally { UI.run.disabled = false; }
+    }
+
+    const syncDualUI = () => {
+        document.querySelectorAll('#dual-axis-toggle .toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.axis === (G.dual ? 'on' : 'off')));
+        UI.inter.classList.toggle('hidden', !G.dual);
+    };
+
+    function setViewMode(m) {
+        G.mode = m;
+        document.querySelectorAll('#view-toggle .toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.view === m));
+        setRange(document.querySelector('.range-btn.active')?.dataset.range || 'MAX');
+    }
+
+    function setDualAxis(e) {
+        G.dual = e;
+        syncDualUI();
+        setRange(document.querySelector('.range-btn.active')?.dataset.range || 'MAX');
+    }
+
+    function setRange(r) {
+        document.querySelectorAll('.range-btn').forEach(b => b.classList.toggle('active', b.dataset.range === r));
+        if (!G.series.length) return;
+        const now = new Date();
+        let cut = new Date('1900-01-01');
+        if (r === 'YTD') cut = new Date(now.getFullYear(), 0, 1);
+        else if (r !== 'MAX') {
+            cut = new Date(now);
+            const n = parseInt(r);
+            if (r.includes('Y')) cut.setFullYear(now.getFullYear() - n);
+            else cut.setMonth(now.getMonth() - n);
         }
 
-        function setViewMode(mode) {
-            GLOBAL.chartMode = mode;
-            document.querySelectorAll('#view-toggle .toggle-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.view === mode);
-            });
+        const filtered = G.series.map(s => ({ ...s, data: s.data.filter(d => new Date(d.d) >= cut) })).filter(s => s.data.length > 1);
+        draw(filtered);
+        upStats(filtered);
+        upTab(filtered);
+    }
 
-            const activeRangeBtn = document.querySelector('.range-btn.active');
-            const currentRange = activeRangeBtn ? activeRangeBtn.dataset.range : 'MAX';
-            setRange(currentRange);
-        }
+    function upStats(list) {
+        UI.stats.innerHTML = list.map(s => {
+            const b = s.data[0], e = s.data[s.data.length - 1], ch = e.c - b.c, p = (ch / b.c) * 100;
+            const cls = ch >= 0 ? 'pos' : 'neg', sgn = ch >= 0 ? '+' : '';
+            return `<div class="stats-row" style="border-left-color:${s.col}">
+                    <div style="color:${s.col}" class="stat-currency-label">${s.cur}</div>
+                    <div><div class="stat-value">${fmt(b.c, s.cur)}</div><div class="stat-sub">${b.d}</div></div>
+                    <div><div class="stat-value">${fmt(e.c, s.cur)}</div><div class="stat-sub">${e.d}</div></div>
+                    <div><div class="stat-value ${cls}">${sgn}${p.toFixed(2)}%</div><div class="stat-sub">${sgn}${fmt(ch, s.cur)}</div></div>
+                </div>`;
+        }).join('');
+    }
 
-        function setDualAxis(enabled) {
-            GLOBAL.showDualAxis = enabled;
-            document.querySelectorAll('#dual-axis-toggle .toggle-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.axis === (enabled ? 'on' : 'off'));
-            });
-
-            // Toggle footnote visibility
-            el('interpretation-section').classList.toggle('hidden', !enabled);
-
-            // Redraw chart with current range
-            const activeRangeBtn = document.querySelector('.range-btn.active');
-            const currentRange = activeRangeBtn ? activeRangeBtn.dataset.range : 'MAX';
-            setRange(currentRange);
-        }
-
-        function setRange(range) {
-            document.querySelectorAll('.range-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.range === range);
-            });
-
-            if (!GLOBAL.series.length) return;
-
-            const now = new Date();
-            let cutoff;
-            if (range === 'MAX') cutoff = new Date('1900-01-01');
-            else if (range === 'YTD') cutoff = new Date(now.getFullYear(), 0, 1);
-            else {
-                cutoff = new Date(now);
-                if (range === '5Y') cutoff.setFullYear(now.getFullYear() - 5);
-                else if (range === '3Y') cutoff.setFullYear(now.getFullYear() - 3);
-                else if (range === '1Y') cutoff.setFullYear(now.getFullYear() - 1);
-                else if (range === '6M') cutoff.setMonth(now.getMonth() - 6);
-                else if (range === '1M') cutoff.setMonth(now.getMonth() - 1);
-            }
-
-            const filteredSeries = GLOBAL.series.map(s => {
-                const filteredData = s.data.filter(d => new Date(d.date) >= cutoff);
-                return { ...s, data: filteredData };
-            }).filter(s => s.data.length > 1);
-
-            drawChart(filteredSeries);
-            updateStats(filteredSeries);
-            renderTable(filteredSeries);
-        }
-
-        function updateStats(seriesList) {
-            const container = el('stats-rows');
-            container.innerHTML = '';
-            seriesList.forEach(s => {
-                const start = s.data[0];
-                const end = s.data[s.data.length - 1];
-                const change = end.converted - start.converted;
-                const pct = (change / start.converted) * 100;
-                const sign = change >= 0 ? '+' : '';
-                const cssClass = change >= 0 ? 'pos' : 'neg';
-
-                const row = document.createElement('div');
-                row.className = 'stats-row';
-                row.style.borderLeftColor = s.color;
-                row.innerHTML = `
-                    <div style="color:${s.color}" class="stat-currency-label">${s.currency}</div>
-                    <div><div class="stat-value">${formatMoney(start.converted, s.currency)}</div><div class="stat-sub">${start.date}</div></div>
-                    <div><div class="stat-value">${formatMoney(end.converted, s.currency)}</div><div class="stat-sub">${end.date}</div></div>
-                    <div><div class="stat-value ${cssClass}">${sign}${pct.toFixed(2)}%</div><div class="stat-sub">${sign}${formatMoney(change, s.currency)}</div></div>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function drawChart(seriesList) {
-            const count = seriesList.length;
-            if (count === 0) return;
-
-            // If only 1, force overlay mode (or just single chart) for simplicity
-            // But logic supports stacked of 1.
-
-            const isStacked = (GLOBAL.chartMode === 'stacked') && (count > 1);
-
-            const baseHeight = 400;
-            const extraHeight = 250;
-            const totalHeight = isStacked ? (baseHeight + (count - 1) * extraHeight) : 500;
-
-            const layout = {
-                autosize: true,
-                height: totalHeight,
-                margin: { l: 60, r: 20, t: 50, b: 50 },
-                showlegend: !isStacked,
-                legend: { orientation: 'h', y: 1.1 },
-                hovermode: 'x unified',
-                dragmode: 'select',
-                selectdirection: 'h'
-            };
-
-            const traces = [];
-
-            if (isStacked) {
-                layout.grid = { rows: count, columns: 1, pattern: 'independent' };
-                seriesList.forEach((s, i) => {
-                    const axisId = (i === 0) ? '' : (i + 1);
-
-                    // Add converted currency trace
+    function draw(list) {
+        const cnt = list.length;
+        if (!cnt) return;
+        const stack = G.mode === 'stacked' && cnt > 1;
+        const layout = {
+            height: stack ? 400 + (cnt - 1) * 250 : 500,
+            margin: { l: 60, r: G.dual ? 60 : 20, t: 50, b: 50 },
+            showlegend: !stack,
+            legend: { orientation: 'h', y: 1.1 },
+            hovermode: 'x unified',
+            dragmode: 'select'
+        };
+        const traces = [];
+        if (stack) {
+            layout.grid = { rows: cnt, columns: 1, pattern: 'independent' };
+            list.forEach((s, i) => {
+                const ax = i === 0 ? '' : i + 1;
+                traces.push({
+                    x: s.data.map(d => d.d), y: s.data.map(d => d.c),
+                    xaxis: `x${ax}`, yaxis: `y${ax}`, type: 'scatter', mode: 'lines',
+                    line: { color: s.col, width: 2 }, name: s.cur,
+                    fill: 'tozeroy', fillcolor: s.col + '10',
+                    hovertemplate: `%{y:.2f}<extra></extra>`
+                });
+                if (G.dual && s.cur !== G.baseMeta.currency) {
+                    const sAx = cnt + 1 + i, yId = `y${sAx}`;
                     traces.push({
-                        x: s.data.map(d => d.date),
-                        y: s.data.map(d => d.converted),
-                        xaxis: `x${axisId}`, yaxis: `y${axisId}`,
-                        type: 'scatter', mode: 'lines',
-                        line: { color: s.color, width: 2 },
-                        name: s.currency,
-                        fill: 'tozeroy', fillcolor: s.color + '10',
-                        hovertemplate: `<b>${s.currency}</b>: %{y:.2f}<extra></extra>`
+                        x: s.data.map(d => d.d), y: s.data.map(d => d.o),
+                        xaxis: `x${ax}`, yaxis: yId, type: 'scatter', mode: 'lines',
+                        line: { color: '#94a3b8', width: 2, dash: 'dot' },
+                        name: `${G.baseMeta.currency} (Base)`, showlegend: i === 0,
+                        hovertemplate: `%{y:.2f}<extra></extra>`
                     });
-
-                    // Add base currency trace if dual axis is enabled and currency differs
-                    if (GLOBAL.showDualAxis && s.currency !== GLOBAL.baseMeta.currency) {
-                        // Create unique secondary axis ID that doesn't conflict with primary axes
-                        // Primary axes use: y, y2, y3, ... y{count}
-                        // Secondary axes should use: y{count+1}, y{count+2}, y{count+3}, etc.
-                        const secondaryAxisNumber = count + 1 + i;
-                        const yaxis2Id = `y${secondaryAxisNumber}`;
-
-                        traces.push({
-                            x: s.data.map(d => d.date),
-                            y: s.data.map(d => d.original),
-                            xaxis: `x${axisId}`,
-                            yaxis: yaxis2Id,
-                            type: 'scatter', mode: 'lines',
-                            line: { color: '#94a3b8', width: 2, dash: 'dot' },
-                            name: `${GLOBAL.baseMeta.currency} (Base)`,
-                            showlegend: i === 0, // Only show in legend once
-                            hovertemplate: `<b>${GLOBAL.baseMeta.currency}</b>: %{y:.2f}<extra></extra>`
-                        });
-
-                        // Configure secondary y-axis for this subplot
-                        // Use 'yaxis' prefix for layout keys (e.g., 'yaxis4', 'yaxis5')
-                        const layoutKey = `yaxis${secondaryAxisNumber}`;
-                        layout[layoutKey] = {
-                            overlaying: `y${axisId}`,
-                            side: 'right',
-                            showgrid: false,
-                            zeroline: false,
-                            fixedrange: true,
-                            anchor: `x${axisId}`
-                        };
-                    }
-
-                    // Configure primary y-axis
-                    layout[`yaxis${axisId}`] = {
-                        title: { text: s.currency, font: { color: s.color, weight: 'bold' } },
-                        showgrid: true, gridcolor: '#f1f5f9', zeroline: false, fixedrange: true,
-                    };
-
-                    // Configure x-axis
-                    layout[`xaxis${axisId}`] = {
-                        showgrid: false, zeroline: false, matches: 'x',
-                        showticklabels: i === count - 1,
-                    };
-                });
-
-                // Adjust right margin if dual axis is enabled
-                if (GLOBAL.showDualAxis) {
-                    layout.margin.r = 60;
+                    layout[`yaxis${sAx}`] = { overlaying: `y${ax}`, side: 'right', showgrid: false, fixedrange: true };
                 }
-            } else {
-                // Overlay Mode
-                seriesList.forEach((s) => {
-                    traces.push({
-                        x: s.data.map(d => d.date),
-                        y: s.data.map(d => d.converted),
-                        type: 'scatter', mode: 'lines',
-                        line: { color: s.color, width: 2 },
-                        name: s.currency,
-                        fill: 'tozeroy', fillcolor: s.color + '05',
-                        hovertemplate: `<b>${s.currency}</b>: %{y:.2f}<extra></extra>`,
-                        yaxis: 'y1'
-                    });
-                });
-
-                // Add dual axis trace if enabled and currency differs from base
-                if (GLOBAL.showDualAxis && seriesList.length > 0) {
-                    const firstSeries = seriesList[0];
-                    // Check if any series has different currency from base
-                    const hasDifferentCurrency = seriesList.some(s => s.currency !== GLOBAL.baseMeta.currency);
-
-                    if (hasDifferentCurrency) {
-                        traces.push({
-                            x: firstSeries.data.map(d => d.date),
-                            y: firstSeries.data.map(d => d.original),
-                            type: 'scatter', mode: 'lines',
-                            line: { color: '#94a3b8', width: 2, dash: 'dot' },
-                            name: `${GLOBAL.baseMeta.currency} (Base)`,
-                            hovertemplate: `<b>${GLOBAL.baseMeta.currency}</b>: %{y:.2f}<extra></extra>`,
-                            yaxis: 'y2'
-                        });
-
-                        // Configure dual axis layout
-                        layout.margin.r = 60;
-                        layout.yaxis2 = {
-                            title: `${GLOBAL.baseMeta.currency} (Base)`,
-                            overlaying: 'y',
-                            side: 'right',
-                            showgrid: false,
-                            zeroline: false,
-                            fixedrange: true
-                        };
-                    }
-                }
-
-                layout.xaxis = { showgrid: false, zeroline: false, fixedrange: true };
-                layout.yaxis = { showgrid: true, gridcolor: '#f1f5f9', zeroline: false, fixedrange: true };
-            }
-
-            const config = { responsive: true, displayModeBar: false };
-            Plotly.newPlot('chart', traces, layout, config).then(gd => {
-                gd.on('plotly_selected', (event) => {
-                    const r = event?.range;
-                    if (r) {
-                        const xRange = r.x || r.x2 || r.x3;
-                        if (xRange) {
-                            const [startDate, endDate] = xRange;
-                            const subset = GLOBAL.series.map(s => ({
-                                ...s,
-                                data: s.data.filter(d => d.date >= startDate && d.date <= endDate)
-                            })).filter(s => s.data.length > 1);
-                            updateStats(subset);
-                        }
-                    }
-                });
-                gd.on('plotly_doubleclick', () => {
-                    const activeBtn = document.querySelector('.range-btn.active');
-                    if (activeBtn) setRange(activeBtn.dataset.range);
-                });
+                layout[`yaxis${ax}`] = { title: { text: s.cur, font: { color: s.col } }, showgrid: true, gridcolor: '#f1f5f9', fixedrange: true };
+                layout[`xaxis${ax}`] = { showgrid: false, matches: 'x', showticklabels: i === cnt - 1 };
             });
-        }
-
-        function renderTable(seriesList) {
-            if (seriesList.length === 0) return;
-            const tableHead = document.querySelector('#dataTable thead');
-            const tableBody = document.querySelector('#dataTable tbody');
-            let headerHTML = `<tr><th>Date</th><th>Original (${GLOBAL.baseMeta.currency})</th>`;
-            seriesList.forEach(s => { headerHTML += `<th style="color:${s.color}">${s.currency} Price</th>`; });
-            headerHTML += `</tr>`;
-            tableHead.innerHTML = headerHTML;
-            const masterLength = seriesList[0].data.length;
-            const startIndex = Math.max(0, masterLength - 30);
-            let bodyHTML = '';
-            for (let i = masterLength - 1; i >= startIndex; i--) {
-                const date = seriesList[0].data[i].date;
-                const original = seriesList[0].data[i].original;
-                bodyHTML += `<tr><td>${date}</td><td>${original.toFixed(2)}</td>`;
-                seriesList.forEach(s => {
-                    const point = s.data[i];
-                    bodyHTML += `<td style="font-weight:600">${point ? point.converted.toFixed(2) : '-'}</td>`;
+        } else {
+            list.forEach(s => traces.push({
+                x: s.data.map(d => d.d), y: s.data.map(d => d.c),
+                type: 'scatter', mode: 'lines', line: { color: s.col, width: 2 },
+                name: s.cur, fill: 'tozeroy', fillcolor: s.col + '05',
+                hovertemplate: `%{y:.2f}<extra></extra>`
+            }));
+            if (G.dual && cnt) {
+                traces.push({
+                    x: list[0].data.map(d => d.d), y: list[0].data.map(d => d.o),
+                    yaxis: 'y2', type: 'scatter', mode: 'lines',
+                    line: { color: '#94a3b8', width: 2, dash: 'dot' },
+                    name: `${G.baseMeta.currency} (Base)`,
+                    hovertemplate: `%{y:.2f}<extra></extra>`
                 });
-                bodyHTML += `</tr>`;
+                layout.yaxis2 = { title: G.baseMeta.currency, overlaying: 'y', side: 'right', showgrid: false, fixedrange: true };
             }
-            tableBody.innerHTML = bodyHTML;
+            layout.xaxis = { showgrid: false, fixedrange: true };
+            layout.yaxis = { showgrid: true, gridcolor: '#f1f5f9', fixedrange: true };
         }
+        Plotly.react('chart', traces, layout, { responsive: true, displayModeBar: false }).then(gd => {
+            gd.off('plotly_selected');
+            gd.on('plotly_selected', e => {
+                const xr = e?.range?.x || e?.range?.x2;
+                if (xr) upStats(G.series.map(s => ({ ...s, data: s.data.filter(d => d.d >= xr[0] && d.d <= xr[1]) })).filter(s => s.data.length > 1));
+            });
+            gd.off('plotly_doubleclick');
+            gd.on('plotly_doubleclick', () => setRange(document.querySelector('.range-btn.active')?.dataset.range || 'MAX'));
+        });
+    }
 
-        function toggleTable() {
-            const i = el('table-container').classList.toggle('hidden');
-            el('table-toggle-text').textContent = i ? "Show Data Table" : "Hide Data Table";
+    function upTab(list) {
+        if (!list.length) return;
+        const head = UI.table.querySelector('thead'), body = UI.table.querySelector('tbody');
+        head.innerHTML = `<tr><th>Date</th><th>Original (${G.baseMeta.currency})</th>${list.map(s => `<th style="color:${s.col}">${s.cur} Price</th>`).join('')}</tr>`;
+        const m = list[0].data, start = Math.max(0, m.length - 30);
+        let h = '';
+        for (let i = m.length - 1; i >= start; i--) {
+            const pt = m[i];
+            h += `<tr><td>${pt.d}</td><td>${pt.o.toFixed(2)}</td>${list.map(s => `<td>${s.data[i] ? s.data[i].c.toFixed(2) : '-'}</td>`).join('')}</tr>`;
         }
+        body.innerHTML = h;
+    }
 
-        el('ticker').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
-        el('targetCurrency').addEventListener('keyup', (e) => { if (e.key === 'Enter') runApp(); });
+    function toggleTable() {
+        const h = UI.tableC.classList.toggle('hidden');
+        UI.tableT.textContent = (h ? "Show" : "Hide") + " Data Table";
+    }
 
-    </script>
+    UI.ticker.onkeyup = UI.currency.onkeyup = e => e.key === 'Enter' && runApp();
+
+</script>
 </body>
 
 </html>
