@@ -488,16 +488,16 @@
             <div class="chart-section">
                 <div class="chart-toolbar">
                     <div class="flex gap-4">
+                        <div id="dual-axis-toggle" class="btn-group hidden">
+                            <button class="btn-toggle active" onclick="setDualAxis(false)"
+                                data-axis="off">Simple</button>
+                            <button class="btn-toggle" onclick="setDualAxis(true)" data-axis="on">Dual Axis</button>
+                        </div>
                         <div id="view-toggle" class="btn-group hidden">
                             <button class="btn-toggle active" onclick="setViewMode('overlay')"
                                 data-view="overlay">Overlay</button>
                             <button class="btn-toggle" onclick="setViewMode('stacked')"
                                 data-view="stacked">Stacked</button>
-                        </div>
-                        <div id="dual-axis-toggle" class="btn-group hidden">
-                            <button class="btn-toggle active" onclick="setDualAxis(false)"
-                                data-axis="off">Simple</button>
-                            <button class="btn-toggle" onclick="setDualAxis(true)" data-axis="on">Dual Axis</button>
                         </div>
                     </div>
                     <div class="btn-group time-ranges">
