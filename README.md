@@ -23,6 +23,7 @@ When investing in foreign markets, your returns aren't just about the stock pric
 -   🕒 **Granular Time Ranges**: Navigate from 1-month to "Max" history with ease.
 -   📱 **Fully Responsive**: Professionally designed for both desktop and mobile viewing with a modern, clean UI.
 -   📄 **Data Transparency**: View the raw underlying pricing and FX data in a collapsible, searchable table.
+-   🖱️ **Interactive Plotting**: Click and drag to measure gains between any two points. Double-click to reset.
 
 ## 🛠️ Installation & Usage
 
