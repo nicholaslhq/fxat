@@ -130,6 +130,18 @@
             font-weight: 400;
         }
 
+        .brand-link {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .brand-link:hover {
+            color: var(--fg);
+            border-color: var(--fg);
+        }
+
         /* Controls */
         .controls-bar {
             margin-top: 24px;
@@ -462,7 +474,8 @@
     <div class="layout">
         <header class="flex-col">
             <div class="brand flex items-center justify-between">
-                <h1>FXAT <span>/ FX-Adjusted Ticker</span></h1>
+                <h1>FXAT <span>/ <a href="https://github.com/nicholaslhq/fxat" target="_blank"
+                            class="brand-link">FX-Adjusted Ticker</a></span></h1>
             </div>
             <div class="controls-bar">
                 <div class="input-block">
