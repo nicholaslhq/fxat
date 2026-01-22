@@ -794,14 +794,66 @@
                 }
             }
 
-            Plotly.react('chart', traces, layout, { responsive: true, displayModeBar: false }).then(gd => {
-                gd.off('plotly_selected');
-                gd.on('plotly_selected', e => {
+            const chartEl = document.getElementById('chart');
+            Plotly.react(chartEl, traces, layout, { responsive: true, displayModeBar: false }).then(() => {
+                chartEl.removeListener?.('plotly_selected', () => { });
+                chartEl.removeAllListeners?.('plotly_selected');
+
+                chartEl.on('plotly_selected', e => {
                     const xr = e?.range?.x || e?.range?.x2;
-                    if (xr) upStats(G.series.map(s => ({ ...s, data: s.data.filter(d => d.d >= xr[0] && d.d <= xr[1]) })).filter(s => s.data.length > 1));
+                    if (!xr || xr.length !== 2) return;
+
+                    // Convert selection bounds to timestamps
+                    const tStart = new Date(xr[0]).getTime();
+                    const tEnd = new Date(xr[1]).getTime();
+
+                    // Snap Function: Finds the nearest date in the dataset
+                    const snap = (t) => {
+                        let best = null, minDiff = Infinity;
+                        if (!list[0]?.data) return null;
+                        for (const pt of list[0].data) {
+                            // Ensure data dates are treated as timestamps too
+                            const dTs = new Date(pt.d).getTime();
+                            const diff = Math.abs(dTs - t);
+                            if (diff < minDiff) { minDiff = diff; best = pt.d; }
+                        }
+                        return best;
+                    };
+
+                    const realStart = snap(tStart);
+                    const realEnd = snap(tEnd);
+
+                    if (!realStart || !realEnd) return;
+
+                    // Filter Logic: Compare lexical strings (ISO dates YYYY-MM-DD are lexicographically sorted)
+                    const subList = list.map(s => ({
+                        ...s,
+                        data: s.data.filter(d => d.d >= realStart && d.d <= realEnd)
+                    })).filter(s => s.data.length > 1);
+
+                    if (subList.length) {
+                        upStats(subList);
+
+                        // Visual Feedback: Vertical dashed lines + faint rectangle
+                        const shapes = [
+                            { type: 'line', x0: realStart, x1: realStart, y0: 0, y1: 1, yref: 'paper', line: { color: '#aaa', width: 1, dash: 'dash' } },
+                            { type: 'line', x0: realEnd, x1: realEnd, y0: 0, y1: 1, yref: 'paper', line: { color: '#aaa', width: 1, dash: 'dash' } },
+                            { type: 'rect', x0: realStart, x1: realEnd, y0: 0, y1: 1, yref: 'paper', fillcolor: '#aaa', opacity: 0.1, line: { width: 0 } }
+                        ];
+                        Plotly.relayout(chartEl, { shapes: shapes });
+                    }
                 });
-                gd.off('plotly_doubleclick');
-                gd.on('plotly_doubleclick', () => setRange(document.querySelector('.time-ranges .active')?.dataset.range || 'MAX'));
+
+                const reset = () => {
+                    setRange(document.querySelector('.time-ranges .active')?.dataset.range || 'MAX');
+                    Plotly.relayout(chartEl, { shapes: [] });
+                };
+
+                chartEl.removeListener?.('plotly_doubleclick', reset);
+                chartEl.removeListener?.('plotly_deselect', reset);
+
+                chartEl.on('plotly_doubleclick', reset);
+                chartEl.on('plotly_deselect', reset);
             });
         }
 
