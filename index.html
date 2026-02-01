@@ -585,8 +585,14 @@
     <script>
         const $ = id => document.getElementById(id),
             YAHOO_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/',
-            PROXY_URL = 'https://corsproxy.io/?',
             CHART_COLORS = ['#2563eb', '#0891b2', '#7c3aed', '#db2777', '#ea580c'],
+            FETCH_STRATEGIES = [
+                { name: 'Direct', url: (endpoint) => endpoint, enabled: true },
+                { name: 'AllOrigins', url: (endpoint) => `https://api.allorigins.win/raw?url=${encodeURIComponent(endpoint)}`, enabled: true },
+                { name: 'CORS Anywhere', url: (endpoint) => `https://cors-anywhere.herokuapp.com/${endpoint}`, enabled: true },
+                { name: 'CorsProxy.io', url: (endpoint) => `https://corsproxy.io/?${encodeURIComponent(endpoint)}`, enabled: true },
+                { name: 'CodeTabs', url: (endpoint) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(endpoint)}`, enabled: true }
+            ],
             UI = {
                 ticker: $('ticker'),
                 currency: $('targetCurrency'),
@@ -617,24 +623,69 @@
             UI.status.innerHTML = t === 'loading' ? `<div class="flex gap-2"><span>●</span> ${m}</div>` : (t === 'error' ? `<strong>Error:</strong> ${m}` : m);
         };
 
-        async function fetchY(s) {
-            const r = await fetch(PROXY_URL + encodeURIComponent(`${YAHOO_BASE}${s}?range=10y&interval=1d`));
-            if (!r.ok) throw Error(`HTTP ${r.status}`);
-            const j = await r.json(), res = j.chart?.result?.[0];
-            if (!res) throw Error(`No data for ${s}`);
-            const ts = res.timestamp || [],
-                q = res.indicators.quote[0],
-                p = res.indicators.adjclose?.[0]?.adjclose || q.close || [],
-                m = res.meta;
-            const data = {}, dates = [];
-            ts.forEach((t, i) => {
-                if (p[i] != null) {
-                    const d = new Date(t * 1000).toISOString().split('T')[0];
-                    data[d] = p[i];
-                    dates.push(d);
+
+        // Robust fetch with multiple fallback strategies
+        async function robustFetch(endpoint, options = {}) {
+            const { strategies = FETCH_STRATEGIES } = options;
+            const attemptLog = [];
+
+            for (const strategy of strategies.filter(s => s.enabled)) {
+                try {
+                    const url = strategy.url(endpoint);
+                    attemptLog.push({ strategy: strategy.name, status: 'attempting' });
+
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    attemptLog[attemptLog.length - 1].status = 'success';
+
+                    return { response, strategy: strategy.name, log: attemptLog };
+                } catch (error) {
+                    attemptLog[attemptLog.length - 1].status = 'failed';
+                    attemptLog[attemptLog.length - 1].error = error.message;
+                    // Continue to next strategy
                 }
-            });
-            return { symbol: m.symbol, currency: m.currency, longName: m.longName || m.shortName || m.symbol, data, dates };
+            }
+
+            // All strategies failed
+            const errorMsg = `All fetch strategies failed:\n${attemptLog.map(a =>
+                `  • ${a.strategy}: ${a.status}${a.error ? ` (${a.error})` : ''}`
+            ).join('\n')}`;
+
+            throw new Error(errorMsg);
+        }
+
+        async function fetchY(s) {
+            const endpoint = `${YAHOO_BASE}${s}?range=10y&interval=1d`;
+
+            try {
+                const { response, strategy } = await robustFetch(endpoint);
+                const j = await response.json();
+                const res = j.chart?.result?.[0];
+
+                if (!res) throw Error(`No data for ${s}`);
+
+                // Log successful strategy for debugging
+                console.log(`✓ Fetched ${s} using ${strategy}`);
+
+                const ts = res.timestamp || [],
+                    q = res.indicators.quote[0],
+                    p = res.indicators.adjclose?.[0]?.adjclose || q.close || [],
+                    m = res.meta;
+                const data = {}, dates = [];
+                ts.forEach((t, i) => {
+                    if (p[i] != null) {
+                        const d = new Date(t * 1000).toISOString().split('T')[0];
+                        data[d] = p[i];
+                        dates.push(d);
+                    }
+                });
+                return { symbol: m.symbol, currency: m.currency, longName: m.longName || m.shortName || m.symbol, data, dates };
+            } catch (error) {
+                // Re-throw with enhanced error message
+                throw new Error(`Failed to fetch ${s}: ${error.message}`);
+            }
         }
 
         async function runApp() {
@@ -696,7 +747,7 @@
 
                 if (lim) showS("Note: Comparison limited to top 5 currencies.", "normal");
 
-            } catch (e) { showS(e.message, "error"); }
+            } catch (e) { showS(e.message.replace(/\\n/g, '<br>'), "error"); }
             finally { UI.run.disabled = false; }
         }
 
